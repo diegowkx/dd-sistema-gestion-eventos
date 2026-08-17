@@ -1,0 +1,25 @@
+/* ==========================================================================
+   ESTILOS GENERALES Y UTILIDADES (general.css)
+   ========================================================================== */
+
+.font-primary-family {
+    font-family: var(--font-primary-id, system-ui, sans-serif);
+}
+
+.font-secondary-family {
+    font-family: var(--font-secondary-id, system-ui, sans-serif);
+}
+
+/* Colores Base y Utilidades de Texto */
+.bg-slate-50 { background-color: #f8fafc; }
+.text-slate-800 { color: #1e293b; }
+.text-slate-600 { color: #475569; }
+.border-slate-100 { border-color: #f1f5f9 !important; }
+
+.text-accent {
+    color: #0e2f44 !important;
+}
+
+.text-white-80 {
+    color: rgba(255, 255, 255, 0.85) !important;
+}

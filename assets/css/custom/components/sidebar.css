@@ -1,0 +1,496 @@
+/* ==========================================================================
+   ESTRUCTURA Y DISEÑO SIDEBAR - INMOBILIARIA (sidebar.css)
+   ========================================================================== */
+
+:root {
+    /* --- Layout Dimensions --- */
+    --header-height: 5.5rem;          
+    --sidebar-width: 18.5rem;         
+    --sidebar-collapsed-width: 5.5rem;
+
+    /* --- Paleta Inmobiliaria --- */
+    --color-primary-dark: #0e2f44;
+    --color-primary-main: #1a4d6e;
+    --color-primary-gradient-end: #0e3b5a;
+    --color-primary-light: #d1e8e2;
+
+    --bg-app-body: #f0ebe5;
+    --bg-sidebar-surface: #ffffff;
+    
+    --text-primary: #1a202c;
+    --text-secondary: #5a6268;
+    --text-inverse: #ffffff;
+
+    /* --- Definiciones específicas del Sidebar --- */
+    --sidebar-active-indicator: var(--color-primary-main);
+    --sidebar-active-bg: rgba(26, 77, 110, 0.06);
+    --sidebar-hover-bg: rgba(26, 77, 110, 0.04);
+    --sidebar-border-color: #e8e3dc;
+
+    /* Gradiente del Header */
+    --gradient-header: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary-main) 100%);
+}
+
+#main-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--bg-app-body);
+}
+
+/* ==========================================================================
+   1. CONFIGURACIÓN GENERAL DEL SIDEBAR
+   ========================================================================== */
+.deznav {
+    width: var(--sidebar-width);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: var(--bg-sidebar-surface);
+    border-right: 1px solid var(--sidebar-border-color);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 20px rgba(14, 47, 68, 0.03);
+}
+
+/* Header con Gradiente y Separador de Onda */
+.deznav .nav-header {
+    height: 97px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.2rem;
+    background: var(--gradient-header) !important;
+    position: relative;
+    overflow: hidden;
+    border-bottom: none;
+}
+
+/* Patrón decorativo de líneas diagonales sincronizado globalmente */
+.deznav .nav-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.06) 2px,
+        transparent 2px,
+        transparent 35px
+    );
+
+    /* Ancla las líneas al plano global de la pantalla */
+    background-attachment: fixed;
+
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Adorno de Onda SVG en la base del Header */
+.deznav .nav-header::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,165.3C672,160,768,192,864,202.7C960,213,1056,203,1152,181.3C1248,160,1344,128,1392,112L1440,96L1440,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.deznav .sidebar-logo {
+    display: block;
+    max-height: 52px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    z-index: 3;
+    position: relative;
+}
+
+.deznav .sidebar-logo-icon {
+    display: none;
+    max-height: 60px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    z-index: 3;
+    position: relative;
+}
+
+.deznav .deznav-scroll {
+    height: calc(100vh - 97px) !important;
+    overflow-y: auto;
+    flex: unset;
+    padding: 0.8rem 0 !important;
+}
+
+/* ==========================================================================
+   2. NAVEGACIÓN Y MENÚ LATERAL
+   ========================================================================== */
+.deznav .metismenu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.deznav .metismenu li {
+    margin: 0.2rem 0;
+    position: relative;
+}
+
+.deznav .metismenu li a {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1.4rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.98rem;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.deznav .metismenu li a i {
+    font-size: 1.25rem;
+    min-width: 2.2rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-main);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.deznav .metismenu li a .nav-text {
+    margin-left: 0.5rem;
+    white-space: nowrap;
+}
+
+/* Hover */
+.deznav .metismenu li:hover > a {
+    color: var(--color-primary-dark);
+    background-color: var(--sidebar-hover-bg);
+    border-left-color: rgba(26, 77, 110, 0.4);
+}
+
+.deznav .metismenu li:hover > a i {
+    transform: translateX(2px);
+}
+
+/* Elemento Activo */
+.deznav .metismenu li.mm-active > a {
+    color: var(--color-primary-dark) !important;
+    background-color: var(--sidebar-active-bg) !important;
+    font-weight: 600;
+    border-left-color: var(--color-primary-main) !important;
+    box-shadow: none !important;
+}
+
+.deznav .metismenu li.mm-active > a i {
+    color: var(--color-primary-main) !important;
+}
+
+/* ==========================================================================
+   3. CUERPO DE LA VISTA
+   ========================================================================== */
+.content-body {
+    flex: 1 0 auto;
+    margin-left: var(--sidebar-width);
+    padding-top: calc(var(--header-height) + 1.5rem);
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 70px !important;
+    transition: margin-left 0.3s ease;
+    background-color: var(--bg-app-body);
+}
+
+/* ==========================================================================
+   4. ESTADO COLAPSADO SOLO EN ESCRITORIO (PC)
+   ========================================================================== */
+@media (min-width: 992px) {
+    body.sidebar-collapsed .deznav {
+        width: var(--sidebar-collapsed-width);
+    }
+
+    body.sidebar-collapsed .deznav .sidebar-profile-card,
+    body.sidebar-collapsed .deznav .nav-label {
+        display: none !important;
+    }
+
+    body.sidebar-collapsed .deznav .metismenu li {
+        margin: 0.3rem 0;
+    }
+
+    body.sidebar-collapsed .deznav .metismenu li a {
+        padding: 0.9rem 0;
+        justify-content: center;
+        border-radius: 0;
+        border-left: 3px solid transparent;
+    }
+
+    body.sidebar-collapsed .deznav .metismenu li a i {
+        font-size: 1.4rem;
+        min-width: unset;
+        margin: 0;
+    }
+
+    /* Ocultamos textos, logo completo Y LAS FLECHAS en PC colapsado */
+    body.sidebar-collapsed .deznav .nav-text, 
+    body.sidebar-collapsed .deznav .sidebar-logo,
+    body.sidebar-collapsed .deznav .sidebar-group-arrow {
+        display: none !important;
+    }
+
+    body.sidebar-collapsed .deznav .sidebar-logo-icon {
+        display: block !important;
+    }
+
+    body.sidebar-collapsed .header,
+    body.sidebar-collapsed .content-body {
+        width: calc(100% - var(--sidebar-collapsed-width));
+        margin-left: var(--sidebar-collapsed-width);
+    }
+
+    body.sidebar-collapsed .footer {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    body.sidebar-collapsed .footer-sidebar-piece {
+        width: var(--sidebar-collapsed-width) !important;
+    }
+
+    body.sidebar-collapsed .footer .container-fluid {
+        padding-left: calc(var(--sidebar-collapsed-width) + 1.5rem) !important;
+    }
+
+    /* En PC colapsado ocultamos submenús */
+    body.sidebar-collapsed .deznav .sidebar-group > .sidebar-submenu {
+        display: none !important;
+    }
+}
+
+
+
+/* ==========================================================================
+   5. GRUPOS DESPLEGABLES DEL SIDEBAR
+   ========================================================================== */
+.deznav .sidebar-group {
+    margin: 0.2rem 0;
+}
+
+.deznav .sidebar-group > .sidebar-group-toggle {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1.4rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.98rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.deznav .sidebar-group > .sidebar-group-toggle > i:first-child {
+    font-size: 1.25rem;
+    min-width: 2.2rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-main);
+}
+
+.deznav .sidebar-group > .sidebar-group-toggle > .nav-text {
+    margin-left: 0.5rem;
+    white-space: nowrap;
+}
+
+.deznav .sidebar-group > .sidebar-group-toggle > .sidebar-group-arrow {
+    margin-left: auto;
+    min-width: auto;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    transition: transform 0.25s ease;
+}
+
+.deznav .sidebar-group > .sidebar-group-toggle:hover {
+    color: var(--color-primary-dark);
+    background-color: var(--sidebar-hover-bg);
+}
+
+/* Grupo desplegado activo */
+.deznav .sidebar-group.sidebar-group-open > .sidebar-group-toggle {
+    color: var(--color-primary-dark);
+    background-color: var(--sidebar-active-bg);
+    font-weight: 600;
+    border-left-color: var(--color-primary-main);
+}
+
+.deznav .sidebar-group.sidebar-group-open > .sidebar-group-toggle > .sidebar-group-arrow {
+    transform: rotate(180deg);
+    color: var(--color-primary-main);
+}
+
+/* --------------------------------------------------------------------------
+   SUBMENÚ (JERARQUÍA INDENTADA CON LÍNEA GUÍA)
+   -------------------------------------------------------------------------- */
+.deznav .sidebar-group > .sidebar-submenu {
+    display: none;
+    list-style: none;
+    margin: 0.2rem 0 0.4rem 0;
+    padding-left: 2.6rem;
+    position: relative;
+}
+
+/* Línea sutil de conexión para submenús */
+.deznav .sidebar-group > .sidebar-submenu::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2.3rem;
+    width: 1px;
+    background-color: #e2d4c3;
+}
+
+.deznav .sidebar-group.sidebar-group-open > .sidebar-submenu {
+    display: block !important; /* Fuerza la visibilidad cuando tiene la clase open */
+}
+
+.deznav .sidebar-group > .sidebar-submenu > li {
+    margin: 0.15rem 0;
+}
+
+.deznav .sidebar-group > .sidebar-submenu > li > a {
+    padding: 0.6rem 1rem;
+    font-size: 0.92rem;
+    border-radius: 4px;
+    border-left: none;
+    color: var(--text-secondary);
+}
+
+.deznav .sidebar-group > .sidebar-submenu > li > a i {
+    font-size: 1.05rem;
+    min-width: 1.8rem;
+    color: var(--text-secondary);
+}
+
+.deznav .sidebar-group > .sidebar-submenu > li:hover > a {
+    color: var(--color-primary-dark);
+    background-color: var(--sidebar-hover-bg);
+}
+
+/* Elemento activo dentro del submenú */
+.deznav .sidebar-group > .sidebar-submenu > li.mm-active > a {
+    color: var(--color-primary-main) !important;
+    background-color: rgba(26, 77, 110, 0.08) !important;
+    font-weight: 600;
+    box-shadow: none !important;
+}
+
+.deznav .sidebar-group > .sidebar-submenu > li.mm-active > a i {
+    color: var(--color-primary-main) !important;
+}
+
+/* ==========================================================================
+   6. RESPONSIVA MÓVIL Y OVERLAY (< 992px)
+   ========================================================================== */
+
+/* Overlay oscuro para pantallas pequeñas */
+.sidebar-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(14, 47, 68, 0.55) !important;
+    z-index: 1000 !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+/* --- REGLAS EXCLUSIVAS PARA MÓVILES Y TABLETS --- */
+@media (max-width: 991.98px) {
+
+    /* 1. La Sidebar oculta fuera de pantalla por defecto */
+    .deznav {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100vh !important;
+        width: 280px !important;
+        transform: translateX(-100%) !important;
+        z-index: 1005 !important;
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15) !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* 2. Cuando se despliega la Sidebar en móvil */
+    body.sidebar-show .deznav,
+    body.sidebar-collapsed .deznav {
+        transform: translateX(0) !important;
+    }
+
+    /* FORZAMOS que en móvil SIEMPRE se vean los textos completos */
+    body.sidebar-collapsed .deznav .nav-text,
+    body.sidebar-collapsed .deznav .sidebar-group-arrow {
+        display: inline-block !important;
+    }
+
+    body.sidebar-collapsed .deznav .sidebar-group > .sidebar-group-toggle {
+        justify-content: flex-start !important;
+        padding: 0.85rem 1.4rem !important;
+    }
+
+    body.sidebar-collapsed .deznav .sidebar-logo {
+        display: block !important;
+    }
+
+    body.sidebar-collapsed .deznav .sidebar-logo-icon {
+        display: none !important;
+    }
+
+    body.sidebar-collapsed .deznav .metismenu li a {
+        justify-content: flex-start !important;
+        padding: 0.85rem 1.4rem !important;
+    }
+
+    /* Permitir que se desplieguen submenús dentro del móvil */
+    body.sidebar-collapsed .deznav .sidebar-group.sidebar-group-open > .sidebar-submenu {
+        display: block !important;
+    }
+
+    /* 3. Activar el Fondo Oscuro (Overlay) */
+    body.sidebar-show .sidebar-overlay,
+    body.sidebar-collapsed .sidebar-overlay {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    /* 4. Ajuste del contenido principal */
+    .content-body {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}

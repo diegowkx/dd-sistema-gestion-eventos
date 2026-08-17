@@ -1,0 +1,25 @@
+/* ==========================================================================
+   ANIMACIONES MODULARES: SIDEBAR (anim_sidebar.css)
+   ========================================================================== */
+
+/* Transición suave para el ancho de la sidebar y desplazamiento del contenido */
+.deznav, 
+.content-body {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: width, margin-left;
+}
+
+/* Transición de aparición/desaparición para los textos del menú */
+.deznav .nav-text,
+.deznav .sidebar-logo {
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Hover suave en los botones */
+.deznav .metismenu a {
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.deznav .metismenu li:hover > a {
+    transform: translateX(3px);
+}

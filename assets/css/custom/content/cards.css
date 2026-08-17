@@ -1,0 +1,20 @@
+/* ==========================================================================
+   ESTRUCTURA Y DISEÑO DE TARJETAS (cards.css)
+   ========================================================================== */
+
+.card-custom {
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.card-header-custom {
+    background-color: #ffffff;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    border-bottom: 2px solid rgba(14, 47, 68, 0.15) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

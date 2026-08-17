@@ -1,0 +1,41 @@
+/* ==========================================================================
+   ESTRUCTURA Y DISEÑO DE BOTONES (buttons.css)
+   ========================================================================== */
+
+.btn-primary-custom {
+    background-color: #0e2f44 !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-family: var(--font-primary-id, system-ui, sans-serif);
+    font-weight: 600;
+    padding: 0.55rem 1.5rem;
+    border-radius: 50rem;
+    transition: all 0.25s ease-in-out;
+}
+
+.btn-primary-custom:hover {
+    background-color: #143e59 !important; 
+    box-shadow: 0 4px 12px rgba(14, 47, 68, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-light-creative {
+    background-color: #f1f5f9;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-light-creative:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #0e2f44 0%, #1a4d6e 100%);
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(14, 47, 68, 0.45);
+}

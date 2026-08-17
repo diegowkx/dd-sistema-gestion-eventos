@@ -1,0 +1,19 @@
+/* ==========================================================================
+   ESTRUCTURA Y DISEÑO DE BADGES (badges.css)
+   ========================================================================== */
+
+/* Badge Estándar del Sistema */
+.badge-custom-dark {
+    background-color: var(--luxury-navy, #0e2f44);
+    color: #ffffff;
+    padding: 0.4em 0.8em;
+    border-radius: 6px;
+}
+
+/* Badge Especial / Premium */
+.badge-luxury-gold {
+    background-color: var(--luxury-gold-light, #f4efe6);
+    color: #8c6d33;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    font-size: 0.75rem;
+}

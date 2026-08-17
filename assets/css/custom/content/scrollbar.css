@@ -1,0 +1,21 @@
+/* ==========================================================================
+   ESTRUCTURA Y DISEÑO DE SCROLLBAR (scrollbar.css)
+   ========================================================================== */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #0e2f44;
+}

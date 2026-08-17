@@ -1,0 +1,295 @@
+/* ==========================================================================
+   SISTEMA DE DISEÑO BASE - VARIABLES GLOBALES Y DEGRADADOS
+   ========================================================================== */
+
+:root {
+    /* --- 1. Paleta de Colores Base --- */
+    --color-primary-dark: #0e2f44;
+    --color-primary-main: #1a4d6e;
+    --color-primary-gradient-end: #0e3b5a;
+    --color-primary-light: #d1e8e2;
+
+    /* --- 2. Parámetros de Degradados (2 colores + ángulo) --- */
+    --gradient-angle: 135deg;
+    
+    /* Degradado del Banner Superior (Fondo) */
+    --banner-gradient-start: var(--color-primary-dark);
+    --banner-gradient-end: var(--color-primary-main);
+    
+    /* Degradado del Botón */
+    --btn-gradient-start: var(--color-primary-main);
+    --btn-gradient-end: var(--color-primary-dark);
+
+    /* Degradado del Logo/Texto */
+    --text-gradient-start: var(--color-primary-main);
+    --text-gradient-end: var(--color-primary-gradient-end);
+
+    /* --- 3. Atajos de Gradientes Armados --- */
+    --gradient-banner: linear-gradient(var(--gradient-angle), var(--banner-gradient-start) 0%, var(--banner-gradient-end) 100%);
+    --gradient-button: linear-gradient(var(--gradient-angle), var(--btn-gradient-start) 0%, var(--btn-gradient-end) 100%);
+    --gradient-text: linear-gradient(var(--gradient-angle), var(--text-gradient-start) 0%, var(--text-gradient-end) 100%);
+
+    /* --- 4. Fondos y Superficies --- */
+    --bg-app-body: #f3e9dc;
+    --bg-card-surface: #ffffff;
+    --bg-input-surface: #fcf9f5;
+
+    /* --- 5. Tipografía y Neutros --- */
+    --text-primary: #1a202c;
+    --text-secondary: #5a6268;
+    --text-labels: #2b3034;
+    --text-placeholder: #8c9398;
+    --text-inverse: #ffffff;
+
+    /* --- 6. Bordes, Radios y Sombras --- */
+    --border-card: #e2d4c3;
+    --border-input: #dcd6cd;
+    --border-radius-card: 16px;
+    --border-radius-input: 8px;
+    
+    --shadow-card: 0 12px 35px rgba(14, 47, 68, 0.12);
+    --shadow-button: 0 4px 12px rgba(14, 47, 68, 0.25);
+    --shadow-button-hover: 0 6px 18px rgba(14, 47, 68, 0.35);
+    --shadow-focus: 0 0 0 3px rgba(26, 77, 110, 0.15);
+
+    --font-family-base: inherit;
+}
+
+/* ==========================================================================
+   ESTILOS DEL MÓDULO LOGIN (CONSUMIENDO DEGRADADOS VARIABLE)
+   ========================================================================== */
+
+/* 1. Fondo General */
+.login-body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-app-body) !important;
+    overflow-x: hidden;
+}
+
+.login-wrapper {
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Banner Superior con Gradiente */
+.login-top-section {
+    position: relative;
+    height: 45vh;
+    min-height: 280px;
+    background: var(--gradient-banner); /* Consume el gradiente armado */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+
+    & .brand-welcome {
+        color: var(--text-inverse);
+        text-align: center;
+        margin-top: -30px;
+        z-index: 2;
+
+        & h1 {
+            font-size: 2.4rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        & p {
+            font-size: 1.05rem;
+            opacity: 0.88;
+            color: var(--color-primary-light);
+            margin: 0;
+        }
+    }
+
+    & .wave-separator {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+
+        & svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 90px;
+        }
+    }
+}
+
+/* 3. Parte Inferior */
+.login-bottom-section {
+    flex: 1;
+    background-color: var(--bg-app-body) !important;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 1.5rem 2.5rem;
+    z-index: 3;
+}
+
+/* 4. Tarjeta del Formulario */
+.font-primary-family {
+
+    & .login-card-box {
+        width: 100%;
+        max-width: 410px;
+        background: var(--bg-card-surface);
+        padding: 2.2rem 2.5rem;
+        border-radius: var(--border-radius-card);
+        box-shadow: var(--shadow-card);
+        margin-top: -90px;
+        border: 1px solid var(--border-card);
+
+        & .login-header {
+            text-align: center;
+            margin-bottom: 1.8rem;
+
+            /* Logo con Texto en Gradiente */
+            & .brand-logo {
+                font-size: 1.8rem;
+                color: var(--color-primary-main) !important;
+                background: var(--gradient-text); /* Consume el gradiente armado */
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                text-decoration: none;
+                display: block;
+                margin-bottom: 0.3rem;
+            }
+
+            & .login-title {
+                font-size: 1.15rem;
+                color: var(--text-secondary);
+            }
+        }
+
+        & .login-form {
+
+            & .form-group {
+                margin-bottom: 1.25rem;
+
+                & label {
+                    display: block;
+                    margin-bottom: 0.4rem;
+                    font-size: 0.9rem;
+                    color: var(--text-labels);
+                }
+
+                & input.form-control,
+                & input.custom-input {
+                    font-family: var(--font-family-base) !important;
+                    font-size: 0.95rem !important;
+                    font-weight: 500 !important;
+                    color: var(--text-primary) !important;
+                    width: 100%;
+                    padding: 0.75rem 1rem !important;
+                    border: 1px solid var(--border-input) !important;
+                    border-radius: var(--border-radius-input) !important;
+                    background-color: var(--bg-input-surface) !important;
+                    transition: all 0.2s ease-in-out;
+
+                    &:focus {
+                        outline: none !important;
+                        background-color: var(--bg-card-surface) !important;
+                        border-color: var(--color-primary-main) !important;
+                        box-shadow: var(--shadow-focus) !important;
+                    }
+                }
+            }
+
+            & .password-wrapper {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%;
+
+                & input {
+                    padding-right: 45px !important;
+                }
+
+                & .password-toggle-btn {
+                    position: absolute;
+                    right: 12px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    color: var(--text-placeholder);
+                    font-size: 1.1rem;
+                    padding: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 5;
+
+                    &:hover {
+                        color: var(--color-primary-main);
+                    }
+                }
+            }
+
+            /* Botón con Gradiente */
+            & .btn-custom-submit {
+                font-family: var(--font-family-base) !important;
+                width: 100%;
+                padding: 0.85rem !important;
+                background: var(--gradient-button) !important; /* Consume el gradiente armado */
+                color: var(--text-inverse) !important;
+                border: none !important;
+                border-radius: var(--border-radius-input) !important;
+                font-size: 1rem !important;
+                font-weight: 600 !important;
+                cursor: pointer;
+                margin-top: 0.5rem;
+                box-shadow: var(--shadow-button);
+                transition: all 0.2s ease;
+
+                &:hover {
+                    opacity: 0.95;
+                    box-shadow: var(--shadow-button-hover);
+                    transform: translateY(-1px);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+}
+
+/* Placeholders */
+input.form-control::placeholder,
+input.custom-input::placeholder {
+    font-size: 0.95rem !important;
+    opacity: 0.7;
+    color: var(--text-placeholder) !important;
+}
+
+/* Responsividad */
+@media (max-width: 576px) {
+    .login-top-section {
+        height: 35vh;
+        min-height: 220px;
+
+        & .brand-welcome h1 { font-size: 1.8rem; }
+        & .brand-welcome p { font-size: 0.95rem; }
+        & .wave-separator svg { height: 50px; }
+    }
+
+    .login-card-box {
+        margin-top: -60px !important;
+        padding: 1.8rem 1.5rem !important;
+    }
+}

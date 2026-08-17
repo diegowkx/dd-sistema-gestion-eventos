@@ -1,0 +1,30 @@
+/* ==========================================================================
+   ANIMACIONES MODULARES: DASHBOARD (anim_dashboard.css)
+   ========================================================================== */
+
+/* Elevación suave al pasar el cursor sobre las tarjetas KPI */
+.card-kpi {
+    transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform, box-shadow;
+}
+
+.card-kpi:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Microinteracción de escalado en el icono de la KPI al hacer hover */
+.card-kpi:hover .kpi-icon-box i {
+    transform: scale(1.12);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Transición suave para el botón de filtrado */
+.btn-filter {
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-filter:active {
+    transform: scale(0.97);
+}
