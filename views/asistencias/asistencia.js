@@ -153,9 +153,9 @@ $(document).ready(function () {
                     } else {
                         botones += `
                             <button type="button" 
-                                    class="btn btn-secondary rounded-circle shadow-sm" 
-                                    style="${btnStyle} opacity: 0.8; cursor: not-allowed;" 
-                                    disabled 
+                                    class="btn btn-secondary btn-bloqueado rounded-circle shadow-sm" 
+                                    data-nombre="${escapeAttribute(nombreCompleto)}" 
+                                    style="${btnStyle} opacity: 0.8;" 
                                     title="Certificado ya emitido">
                                 ${svgLock}
                             </button>
@@ -370,6 +370,21 @@ $(document).ready(function () {
                     })
                     .catch(() => Swal.fire('Error', 'Error de conexión con el servidor.', 'error'));
             });
+        }
+
+        // AVISO EN SWEETALERT AL HACER CLIC EN EL CANDADO
+        const btnBloqueado = e.target.closest('.btn-bloqueado');
+        if (btnBloqueado) {
+            const nombre = btnBloqueado.getAttribute('data-nombre');
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Asistencia Bloqueada',
+                html: `La asistencia de <strong>${escapeHtml(nombre)}</strong> no se puede modificar porque su <strong>certificado digital ya fue emitido</strong>.`,
+                confirmButtonColor: '#0097a7',
+                confirmButtonText: 'Entendido'
+            });
+            return;
         }
     });
 

@@ -182,7 +182,7 @@ function landingUrl(string $ruta): string
 
 
 <script
-    src="<?= htmlspecialchars($baseUrl) ?>/LandingPage/views/inicio.js"
+    src="<?= htmlspecialchars($baseUrl) ?>/LandingPage/views/inicio/inicio.js"
 ></script>
 
 

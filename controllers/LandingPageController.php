@@ -14,18 +14,18 @@ class LandingPageController
         $model = new LandingPage($pdo);
 
         /*
-         * Solamente propiedades:
+         * Solamente eventos:
          *
-         * - activas
-         * - aprobadas
+         * - activos
+         * - aprobados
          *
-         * No se muestran PENDIENTES ni RECHAZADAS.
+         * No se muestran pendientes ni rechazados.
          */
         
 
-        $title = 'Terra Sogno';
+        $title = 'Evenrity';
 
-        require_once __DIR__ . '/../LandingPage/views/inicio.php';
+        require_once __DIR__ . '/../LandingPage/views/inicio/inicio.php';
     }
 
 
