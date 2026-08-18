@@ -47,6 +47,12 @@ if ($actionName === '') {
     $actionName = 'index';
 }
 
+// Mantener compatibles las URLs antiguas del landing público.
+$controllerName = match ($controllerName) {
+    'landing', 'landingpage' => 'landing_page',
+    default => $controllerName,
+};
+
 /*
 |--------------------------------------------------------------------------
 | PETICIONES AJAX

@@ -9,9 +9,9 @@ RewriteCond %{REQUEST_URI} ^/views/ [NC]
 RewriteCond %{REQUEST_URI} \.php$ [NC]
 RewriteRule ^ - [F,L]
 # Redirecciones amigables para la Landing Page
-RewriteRule ^eventos$ index.php?c=landing&a=eventos [L,QSA]
-RewriteRule ^nosotros$ index.php?c=landing&a=nosotros [L,QSA]
-RewriteRule ^detalle$ index.php?c=landing&a=detalle [L,QSA]
+RewriteRule ^eventos$ index.php?c=landing_page&a=eventos [L,QSA]
+RewriteRule ^nosotros$ index.php?c=landing_page&a=nosotros [L,QSA]
+RewriteRule ^detalle$ index.php?c=landing_page&a=detalle [L,QSA]
 
 # Bloquear archivos ocultos (.vscode, .htaccess)
 RewriteRule (^|/)\.(?!well-known) - [F]

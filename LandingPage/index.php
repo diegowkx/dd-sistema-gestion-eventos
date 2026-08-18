@@ -201,6 +201,6 @@ $baseUrl         = defined('BASE_URL') ? BASE_URL : '';
     <script>
         const BASE_URL  = "<?php echo $baseUrl; ?>";
     </script>
-    <script src="<?php echo $baseUrl; ?>/LandingPage/landingPage.js"></script>
+    <script src="<?php echo $baseUrl; ?>/LandingPage/landingPage.js?v=20260818"></script>
 </body>
 </html>
