@@ -4,22 +4,23 @@
 
 .nav-pills-custom .nav-link {
     font-family: var(--font-primary-id, system-ui, sans-serif);
-    font-weight: 700;
-    border-radius: 50rem;
+    font-weight: 600;
+    border-radius: 0 !important;
     padding: 0.5rem 1.25rem;
-    color: #64748b;
-    background-color: #f1f5f9;
-    transition: all 0.25s ease-in-out;
-    border: none;
+    color: #5c554e;
+    background-color: #f7f5f2;
+    transition: all 0.15s ease;
+    border: 1px solid #e3ded8;
 }
 
 .nav-pills-custom .nav-link:hover {
-    color: #0e2f44;
-    background-color: rgba(14, 47, 68, 0.1);
+    color: #2a2623;
+    background-color: rgba(144, 124, 106, 0.12);
 }
 
 .nav-pills-custom .nav-link.active {
-    background-color: #0e2f44 !important;
+    background-color: #907C6A !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(14, 47, 68, 0.25);
+    border-color: #82705f !important;
+    box-shadow: none !important;
 }

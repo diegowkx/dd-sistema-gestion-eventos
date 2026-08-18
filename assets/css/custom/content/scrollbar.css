@@ -7,15 +7,15 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 10px;
+    background: #f4f3f0;
+    border-radius: 0;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
+    background: #c2b8ae;
+    border-radius: 0;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #0e2f44;
+    background: #907C6A;
 }

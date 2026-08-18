@@ -3,39 +3,47 @@
    ========================================================================== */
 
 .btn-primary-custom {
-    background-color: #0e2f44 !important;
+    background-color: #907C6A !important;
     color: #ffffff !important;
-    border: none !important;
+    border: 1px solid #82705f !important;
     font-family: var(--font-primary-id, system-ui, sans-serif);
     font-weight: 600;
     padding: 0.55rem 1.5rem;
-    border-radius: 50rem;
-    transition: all 0.25s ease-in-out;
+    border-radius: 0 !important;
+    transition: all 0.15s ease;
+    box-shadow: none !important;
 }
 
 .btn-primary-custom:hover {
-    background-color: #143e59 !important; 
-    box-shadow: 0 4px 12px rgba(14, 47, 68, 0.35);
-    transform: translateY(-1px);
+    background-color: #7d6a59 !important;
+    border-color: #7d6a59 !important;
+    color: #ffffff !important;
+    transform: none !important;
 }
 
 .btn-light-creative {
-    background-color: #f1f5f9;
-    border: none;
-    transition: all 0.2s ease;
+    background-color: #f7f5f2;
+    border: 1px solid #e3ded8;
+    color: #2a2623;
+    border-radius: 0 !important;
+    transition: all 0.15s ease;
 }
 
 .btn-light-creative:hover {
-    background-color: #e2e8f0;
+    background-color: #eae5de;
+    color: #2a2623;
 }
 
 .btn-gradient-primary {
-    background: linear-gradient(135deg, #0e2f44 0%, #1a4d6e 100%);
-    border: none;
-    transition: all 0.25s ease;
+    background: #907C6A !important;
+    color: #ffffff !important;
+    border: 1px solid #82705f !important;
+    border-radius: 0 !important;
+    transition: all 0.15s ease;
 }
 
 .btn-gradient-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(14, 47, 68, 0.45);
+    background-color: #7d6a59 !important;
+    transform: none !important;
+    box-shadow: none !important;
 }

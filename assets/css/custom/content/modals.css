@@ -4,12 +4,17 @@
 
 /* Variables de Color Principal */
 :root {
-    --luxury-navy: #0e2f44;
-    --luxury-gold: #c5a059;
-    --luxury-gold-light: #fdfbf7;
-    --luxury-gray-bg: #f8fafc;
-    --luxury-border: #e2e8f0;
-    --luxury-blue-selected: #f0f4f8; /* Fondo suave para selección en armonía */
+    --luxury-navy: #5c4f43;
+    --luxury-gold: #907C6A;
+    --luxury-gold-light: #f7f5f2;
+    --luxury-gray-bg: #f8f9fa;
+    --luxury-border: #e3ded8;
+    --luxury-blue-selected: rgba(144, 124, 106, 0.08);
+}
+
+.modal-content {
+    border-radius: 0 !important;
+    border: 1px solid var(--luxury-border) !important;
 }
 
 .text-dark-blue {
@@ -29,39 +34,40 @@
 
 /* Icon Box Elegante (Header de Modales) */
 .luxury-icon-box {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     background-color: var(--luxury-gold-light);
     color: var(--luxury-gold);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.1rem;
-    border: 1px solid rgba(197, 160, 89, 0.3);
+    border: 1px solid var(--luxury-border);
+    border-radius: 0 !important;
 }
 
 /* ==========================================================================
-   BOTONES DEL SISTEMA (DORADO ELEGANTE EN ACCIÓN PRINCIPAL)
+   BOTONES DEL SISTEMA
    ========================================================================== */
 
-/* Botón Guardar / Confirmar (Dorado con texto oscuro elegante) */
 .btn-luxury-primary,
 .btn-primary-custom {
     background-color: var(--luxury-gold) !important;
-    color: #ffffff !important; /* O #0e2f44 si prefieres el texto en azul oscuro sobre el dorado */
-    border: 1px solid var(--luxury-gold) !important;
-    transition: all 0.25s ease !important;
-    box-shadow: 0 2px 8px rgba(197, 160, 89, 0.25) !important;
+    color: #ffffff !important;
+    border: 1px solid #82705f !important;
+    transition: all 0.15s ease !important;
+    box-shadow: none !important;
     font-weight: 600 !important;
+    border-radius: 0 !important;
 }
 
 .btn-luxury-primary:hover,
 .btn-primary-custom:hover {
-    background-color: #b5914b !important; /* Dorado un punto más oscuro en hover */
-    border-color: #b5914b !important;
-    box-shadow: 0 4px 12px rgba(197, 160, 89, 0.4) !important;
-    transform: translateY(-1px);
+    background-color: #7d6a59 !important;
+    border-color: #7d6a59 !important;
+    transform: none !important;
 }
+
 /* ==========================================================================
    NAVEGACIÓN Y PESTAÑAS (NAV TABS)
    ========================================================================== */
@@ -73,11 +79,12 @@
 .nav-tabs-luxury .nav-link {
     border: none;
     background: transparent;
-    color: #64748b;
+    color: #5c554e;
     padding: 0.6rem 1rem;
     border-bottom: 2px solid transparent;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     font-size: 0.875rem;
+    border-radius: 0 !important;
 }
 
 .nav-tabs-luxury .nav-link.active {
@@ -97,48 +104,47 @@
    ========================================================================== */
 
 .form-control-luxury {
-    height: 48px !important;
+    height: 44px !important;
     background-color: #ffffff !important;
     font-size: 0.9rem !important;
-    border-color: var(--luxury-border) !important;
+    border: 1px solid var(--luxury-border) !important;
     color: var(--luxury-navy) !important;
-    transition: all 0.2s ease !important;
+    border-radius: 0 !important;
+    transition: all 0.15s ease !important;
 }
 
 .form-control-luxury:focus {
-    border-color: var(--luxury-navy) !important;
-    box-shadow: 0 0 0 3px rgba(14, 47, 68, 0.1) !important;
+    border-color: var(--luxury-gold) !important;
+    box-shadow: 0 0 0 2px rgba(144, 124, 106, 0.2) !important;
 }
 
 /* ==========================================================================
-   TARJETAS DE PERMISOS (SELECCIÓN INTEGRADA AL AZUL CORPORATIVO)
+   TARJETAS DE PERMISOS
    ========================================================================== */
 
 .permiso-card-luxury {
     background-color: #ffffff;
     border: 1px solid var(--luxury-border);
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     height: 82px !important;
     box-sizing: border-box !important;
     padding: 0.75rem 0.85rem !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
+    border-radius: 0 !important;
 }
 
 .permiso-card-luxury:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border-color: var(--luxury-gold);
 }
 
-/* Contenedor interno de Icono + Texto */
 .permiso-card-luxury > div:first-child {
     flex: 1 1 auto !important;
     min-width: 0 !important;
     padding-right: 0.5rem !important;
 }
 
-/* Descripción */
 .permiso-card-luxury small.text-muted {
     display: -webkit-box !important;
     -webkit-line-clamp: 2;
@@ -149,17 +155,16 @@
     margin-top: 2px !important;
 }
 
-/* Icono del permiso */
 .permiso-icon-wrapper {
     width: 34px;
     height: 34px;
-    background-color: #f1f5f9;
-    color: #64748b;
-    transition: all 0.2s ease;
+    background-color: var(--luxury-gold-light);
+    color: var(--luxury-gold);
+    transition: all 0.15s ease;
     flex-shrink: 0 !important;
+    border-radius: 0 !important;
 }
 
-/* Checkbox */
 .permiso-card-luxury .form-check {
     flex-shrink: 0 !important;
     margin-left: 0.5rem !important;
@@ -169,22 +174,22 @@
     width: 1.15rem !important;
     height: 1.15rem !important;
     cursor: pointer;
-    border: 1.5px solid #cbd5e1 !important;
+    border: 1.5px solid var(--luxury-border) !important;
+    border-radius: 0 !important;
 }
 
 .chk-permiso-luxury:checked {
-    background-color: var(--luxury-navy) !important;
-    border-color: var(--luxury-navy) !important;
+    background-color: var(--luxury-gold) !important;
+    border-color: var(--luxury-gold) !important;
 }
 
-/* ESTADO SELECCIONADO: Ahora usa azul suave integrado con borde azul sólido */
 .permiso-card-luxury:has(.chk-permiso-luxury:checked) {
     background-color: var(--luxury-blue-selected) !important;
-    border-color: var(--luxury-navy) !important;
+    border-color: var(--luxury-gold) !important;
 }
 
 .permiso-card-luxury:has(.chk-permiso-luxury:checked) .permiso-icon-wrapper {
-    background-color: var(--luxury-navy) !important;
+    background-color: var(--luxury-gold) !important;
     color: #ffffff !important;
 }
 
@@ -193,9 +198,10 @@
    ========================================================================== */
 
 .badge-luxury-gold {
-    background-color: #f8fafc;
+    background-color: #f7f5f2;
     color: var(--luxury-navy);
     border: 1px solid var(--luxury-border);
     font-size: 0.75rem;
     font-weight: 600;
+    border-radius: 0 !important;
 }
