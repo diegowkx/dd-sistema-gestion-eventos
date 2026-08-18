@@ -152,6 +152,6 @@
     <script>
         window.BASE_URL = window.BASE_URL || '<?php echo BASE_URL; ?>';
     </script>
-    <script src="<?php echo BASE_URL; ?>/views/asistencias/asistencias.js"></script>
+    <script src="<?php echo BASE_URL; ?>/views/asistencias/asistencia.js"></script>
 </body>
 </html>

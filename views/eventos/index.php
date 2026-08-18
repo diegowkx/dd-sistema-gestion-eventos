@@ -84,6 +84,6 @@
         window.BASE_URL = window.BASE_URL || '<?php echo BASE_URL; ?>';
     </script>
 
-    <script src="<?php echo BASE_URL; ?>/views/eventos/eventos.js"></script>
+    <script src="<?php echo BASE_URL; ?>/views/eventos/evento.js"></script>
 </body>
 </html>
