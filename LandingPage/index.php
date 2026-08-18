@@ -104,15 +104,38 @@ $baseUrl         = defined('BASE_URL') ? BASE_URL : '';
                     <p>Todos los seminarios, talleres y conferencias vigentes</p>
                 </div>
 
-                <div class="events-grid">
+                <div class="events-filter-bar" role="search">
+                    <div class="filter-search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <label class="visually-hidden" for="eventSearch">Buscar eventos</label>
+                        <input type="search" id="eventSearch" placeholder="Buscar por título, tema o descripción" autocomplete="off">
+                    </div>
+                    <div class="filter-date">
+                        <label for="eventDateFrom">Desde</label>
+                        <input type="date" id="eventDateFrom">
+                    </div>
+                    <div class="filter-date">
+                        <label for="eventDateTo">Hasta</label>
+                        <input type="date" id="eventDateTo">
+                    </div>
+                    <button type="button" class="filter-clear" id="clearEventFilters" title="Limpiar filtros">
+                        <i class="fas fa-rotate-left" aria-hidden="true"></i>
+                        <span>Limpiar</span>
+                    </button>
+                </div>
+
+                <div class="events-grid" id="eventsGrid">
                     <?php if (empty($todosEventos)): ?>
-                        <div class="no-events-message w-100 text-center">
+                        <div class="no-events-message w-100 text-center" id="eventsEmptyState">
                             <i class="fas fa-calendar-times"></i>
                             <p>No hay eventos disponibles por el momento.</p>
                         </div>
                     <?php else: ?>
                         <?php foreach ($todosEventos as $ev): ?>
-                            <article class="event-card" data-id="<?php echo $ev['id']; ?>">
+                            <article class="event-card event-list-card"
+                                     data-id="<?php echo $ev['id']; ?>"
+                                     data-search="<?php echo htmlspecialchars(strtolower($ev['titulo'] . ' ' . $ev['tema'] . ' ' . $ev['descripcion'] . ' ' . ($ev['direccion'] ?? '')), ENT_QUOTES, 'UTF-8'); ?>"
+                                     data-date="<?php echo date('Y-m-d', strtotime($ev['fecha_evento'])); ?>">
                                 <div class="event-card-img">
                                             <img src="<?php echo !empty($ev['imagen']) ? $ev['imagen'] : $baseUrl . '/assets/images/logo-image.png'; ?>" alt="<?php echo htmlspecialchars($ev['titulo']); ?>">
                                     <span class="event-badge"><?php echo htmlspecialchars($ev['tema']); ?></span>
@@ -133,6 +156,10 @@ $baseUrl         = defined('BASE_URL') ? BASE_URL : '';
                             </article>
                         <?php endforeach; ?>
                     <?php endif; ?>
+                </div>
+                <div class="no-events-message filter-no-results" id="filterNoResults" hidden>
+                    <i class="fas fa-filter-circle-xmark"></i>
+                    <p>No encontramos eventos con esos criterios.</p>
                 </div>
             </div>
         </section>

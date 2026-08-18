@@ -36,6 +36,8 @@ class LandingPageController {
             exit;
         }
 
+        $evento['imagenes'] = $evento['imagenes'] ?: [$evento['imagen']];
+
         $evento['es_pasado'] = strtotime($evento['fecha_evento']) < time();
         $evento['cupos_disponibles'] = $this->model->getCuposDisponibles((int)$evento['id'], (int)$evento['cupos']);
         $evento['fecha_evento'] = date('d/m/Y h:i A', strtotime($evento['fecha_evento']));

@@ -45,7 +45,23 @@ class LandingPage {
             WHERE e.id = ? AND e.publicacion = 'APROBADO' AND e.activo = 1
         ");
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $evento = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$evento) {
+            return false;
+        }
+
+        $imagenesStmt = $this->pdo->prepare("
+            SELECT ruta
+            FROM imagenes_evento
+            WHERE evento_id = ? AND eliminacion = 0
+            ORDER BY orden ASC
+            LIMIT 5
+        ");
+        $imagenesStmt->execute([$id]);
+        $evento['imagenes'] = array_column($imagenesStmt->fetchAll(PDO::FETCH_ASSOC), 'ruta');
+
+        return $evento;
     }
 
     public function estaInscrito(int $eventoId, string $documentoId): bool {

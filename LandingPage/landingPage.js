@@ -1,8 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
     initCarousel();
+    initEventFilters();
     initHashRouter();
     window.addEventListener('hashchange', initHashRouter);
 });
+
+function initEventFilters() {
+    const searchInput = document.getElementById('eventSearch');
+    const dateFromInput = document.getElementById('eventDateFrom');
+    const dateToInput = document.getElementById('eventDateTo');
+    const clearButton = document.getElementById('clearEventFilters');
+    const cards = Array.from(document.querySelectorAll('.event-list-card'));
+    const noResults = document.getElementById('filterNoResults');
+
+    if (!searchInput || !dateFromInput || !dateToInput || !clearButton) return;
+
+    function applyFilters() {
+        const search = searchInput.value.trim().toLowerCase();
+        const dateFrom = dateFromInput.value;
+        const dateTo = dateToInput.value;
+        let visibleCards = 0;
+
+        cards.forEach(card => {
+            const matchesSearch = !search || card.dataset.search.includes(search);
+            const eventDate = card.dataset.date;
+            const matchesFrom = !dateFrom || eventDate >= dateFrom;
+            const matchesTo = !dateTo || eventDate <= dateTo;
+            const isVisible = matchesSearch && matchesFrom && matchesTo;
+
+            card.hidden = !isVisible;
+            if (isVisible) visibleCards++;
+        });
+
+        if (noResults) noResults.hidden = visibleCards > 0 || cards.length === 0;
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    dateFromInput.addEventListener('change', applyFilters);
+    dateToInput.addEventListener('change', applyFilters);
+    clearButton.addEventListener('click', () => {
+        searchInput.value = '';
+        dateFromInput.value = '';
+        dateToInput.value = '';
+        applyFilters();
+    });
+}
 
 function initHashRouter() {
     const hash = window.location.hash || '#';
@@ -71,6 +113,10 @@ function renderEventDetailUI(evento) {
     const container = document.getElementById('detalleContent');
 
     const estaBloqueado = evento.es_pasado || evento.cupos_disponibles <= 0;
+    const imagenes = Array.isArray(evento.imagenes) && evento.imagenes.length
+        ? evento.imagenes.filter(Boolean)
+        : [evento.imagen].filter(Boolean);
+    const imagenInicial = imagenes[0] || `${BASE_URL}/assets/images/logo-image.png`;
 
     let mensajeEstado = '';
     if (evento.es_pasado) {
@@ -84,70 +130,97 @@ function renderEventDetailUI(evento) {
             &larr; Volver a Eventos
         </a>
         
-        <div class="event-card" style="max-width: 850px; margin: 0 auto; height: auto;">
-            <div class="event-card-img" style="height: 300px;">
-                <img src="${evento.imagen ? evento.imagen : `${BASE_URL}/assets/images/logo-image.png`}" alt="${evento.titulo}">
-                <span class="event-badge">${evento.tema}</span>
+        <article class="event-detail-layout">
+            <div class="event-detail-gallery">
+                <div class="event-detail-image-wrap">
+                    <img id="detailGalleryImage" src="${imagenInicial}" alt="${evento.titulo}">
+                    <span class="event-badge">${evento.tema}</span>
+                    ${imagenes.length > 1 ? `
+                        <button type="button" class="detail-gallery-control prev" id="detailGalleryPrev" aria-label="Imagen anterior">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button type="button" class="detail-gallery-control next" id="detailGalleryNext" aria-label="Imagen siguiente">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    ` : ''}
+                </div>
+                ${imagenes.length > 1 ? `
+                    <div class="detail-gallery-footer">
+                        <div class="detail-gallery-dots" id="detailGalleryDots">
+                            ${imagenes.map((_, index) => `<button type="button" class="detail-gallery-dot${index === 0 ? ' active' : ''}" data-index="${index}" aria-label="Ver imagen ${index + 1}"></button>`).join('')}
+                        </div>
+                        <span class="detail-gallery-counter" id="detailGalleryCounter">1 / ${imagenes.length}</span>
+                    </div>
+                ` : ''}
             </div>
-            <div class="event-card-body" style="padding: 2rem;">
-                <div class="event-date" style="font-size: 1rem;">
+
+            <div class="event-detail-content">
+                <div class="event-date">
                     <i class="far fa-calendar-alt"></i> ${evento.fecha_evento} &nbsp;|&nbsp; 
                     <i class="fas fa-map-marker-alt"></i> ${evento.direccion}
                 </div>
-                <h1 style="color: var(--color-primary-dark); margin: 0.5rem 0;">${evento.titulo}</h1>
-                <p style="font-size: 1rem; color: var(--color-text-muted); margin: 1rem 0;">${evento.descripcion}</p>
-                <div style="font-size: 0.95rem; margin-bottom: 1.5rem; color: var(--color-primary-main);">
+                <h1>${evento.titulo}</h1>
+                <p class="event-detail-description">${evento.descripcion}</p>
+                <div class="event-detail-availability">
                     <strong>Cupos Disponibles:</strong> ${evento.cupos_disponibles} de ${evento.cupos}
                 </div>
 
                 ${mensajeEstado}
 
                 ${!estaBloqueado ? `
-                    <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--color-border);">
-                    <h3 class="mb-3">Formulario de Inscripción al Evento</h3>
-                    
-                    <form id="registrationForm">
-                        <input type="hidden" name="evento_id" value="${evento.id}">
-                        
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Documento de Identidad (*)</label>
-                                <input type="text" class="form-control" name="documento_id" maxlength="15" required>
+                    <div class="event-detail-registration">
+                        <h2>Formulario de inscripción</h2>
+
+                        <form id="registrationForm">
+                            <input type="hidden" name="evento_id" value="${evento.id}">
+
+                            <!-- Fila 1: Datos personales básicos -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Nombres (*)</label>
+                                    <input type="text" class="form-control" name="nombres" required placeholder="Ej. Juan">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Apellidos (*)</label>
+                                    <input type="text" class="form-control" name="apellidos" required placeholder="Ej. Pérez">
+                                </div>
                             </div>
-                            <div class="col-md-6">
+
+                            <!-- Fila 2: Identificación y Teléfono (Misma fila para balancear) -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Doc. Identidad (*)</label>
+                                    <input type="text" class="form-control" name="documento_id" maxlength="15" required placeholder="DNI / Pasaporte">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Teléfono</label>
+                                    <input type="tel" class="form-control" name="telefono" maxlength="15" placeholder="Ej. 987654321">
+                                </div>
+                            </div>
+
+                            <!-- Fila 3: Correo a todo lo ancho al final (Contacto principal) -->
+                            <div class="mb-4">
                                 <label class="form-label">Correo Electrónico (*)</label>
-                                <input type="email" class="form-control" name="correo" required>
+                                <input type="email" class="form-control" name="correo" required placeholder="nombre@correo.com">
                             </div>
-                        </div>
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Nombres (*)</label>
-                                <input type="text" class="form-control" name="nombres" required>
+                            <div class="event-detail-submit">
+                                <span class="event-price">
+                                    ${Number(evento.precio) > 0 ? 'S/ ' + Number(evento.precio).toFixed(2) : 'Gratis'}
+                                </span>
+
+                                <button type="submit" class="landing-btn landing-btn-primary">Confirmar Inscripción</button>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Apellidos (*)</label>
-                                <input type="text" class="form-control" name="apellidos" required>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">Teléfono</label>
-                                <input type="text" class="form-control" name="telefono" maxlength="15">
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                            <span class="event-price" style="font-size: 1.6rem; font-weight: bold;">
-                                ${Number(evento.precio) > 0 ? 'S/ ' + Number(evento.precio).toFixed(2) : 'Gratis'}
-                            </span>
-                            
-                            <button type="submit" class="landing-btn landing-btn-primary">Confirmar Inscripción</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 ` : ''}
             </div>
-        </div>
+        </article>
     `;
+
+    if (imagenes.length > 1) {
+        initDetailGallery(imagenes, evento.titulo);
+    }
 
     const form = document.getElementById('registrationForm');
 
@@ -231,4 +304,39 @@ function initCarousel() {
     });
 
     window.addEventListener('resize', updateCarouselPosition);
+}
+
+function initDetailGallery(imagenes, titulo) {
+    const image = document.getElementById('detailGalleryImage');
+    const counter = document.getElementById('detailGalleryCounter');
+    const dots = document.querySelectorAll('.detail-gallery-dot');
+    let currentIndex = 0;
+    let timer;
+
+    function showImage(index) {
+        currentIndex = (index + imagenes.length) % imagenes.length;
+        image.src = imagenes[currentIndex];
+        image.alt = `${titulo} - imagen ${currentIndex + 1}`;
+        counter.textContent = `${currentIndex + 1} / ${imagenes.length}`;
+        dots.forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === currentIndex));
+    }
+
+    function restartAutoPlay() {
+        window.clearInterval(timer);
+        timer = window.setInterval(() => showImage(currentIndex + 1), 5000);
+    }
+
+    document.getElementById('detailGalleryPrev')?.addEventListener('click', () => {
+        showImage(currentIndex - 1);
+        restartAutoPlay();
+    });
+    document.getElementById('detailGalleryNext')?.addEventListener('click', () => {
+        showImage(currentIndex + 1);
+        restartAutoPlay();
+    });
+    dots.forEach(dot => dot.addEventListener('click', () => {
+        showImage(Number(dot.dataset.index));
+        restartAutoPlay();
+    }));
+    restartAutoPlay();
 }
