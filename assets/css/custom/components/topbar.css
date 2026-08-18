@@ -1,6 +1,13 @@
 /* ==========================================================================
-   ESTRUCTURA Y DISEÑO TOPBAR (topbar.css)
+   ESTRUCTURA Y DISEÑO TOPBAR - EJECUTIVO / SOBRIO (topbar.css)
    ========================================================================== */
+
+:root {
+    --header-bg: #f8f9fa; /* Gris claro elegante */
+    --header-border-color: #e2e8f0;
+    --text-header-main: #2d3748;
+    --color-accent-main: #907C6A;
+}
 
 .header {
     position: fixed;
@@ -8,33 +15,16 @@
     right: 0;
     width: calc(100% - var(--sidebar-width));
     height: var(--header-height);
-    background-color: #ffffff;
-    border-bottom: 1px solid #e9ecef;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--header-border-color);
     z-index: 1000;
-    overflow: visible !important; /* Mantenemos visible para permitir que el dropdown sobresalga */
-    transition: width 0.3s ease, margin-left 0.3s ease;
+    overflow: visible !important;
+    transition: width 0.25s ease-in-out, margin-left 0.25s ease-in-out;
 }
 
-/* Fondo decorativo con líneas diagonales espaciadas y visibles */
+/* Ocultar completamente cualquier textura o patrón decorativo */
 .header-decorations {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
-    background: repeating-linear-gradient(
-        -45deg,
-        rgba(14, 47, 68, 0.04),
-        rgba(14, 47, 68, 0.04) 2px,
-        transparent 2px,
-        transparent 35px
-    );
-
-    /*  Ancla al plano global */
-    background-attachment: fixed;
+    display: none !important;
 }
 
 .header .header-content {
@@ -43,43 +33,71 @@
     z-index: 1;
 }
 
+/* --- Botón Toggle Menú --- */
+#nav_toggle {
+    color: var(--text-header-main) !important;
+    transition: color 0.15s ease;
+}
+
+#nav_toggle:hover {
+    color: var(--color-accent-main) !important;
+}
+
+/* --- Dropdown de Usuario Sobrio y Recto --- */
 .header .dropdown-menu {
     z-index: 9999 !important;
     position: absolute !important;
+    background-color: #ffffff;
+    border: 1px solid var(--header-border-color) !important;
+    border-radius: 0 !important; /* Totalmente recto */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    padding: 0.25rem 0 !important;
 }
 
 .dropdown-menu .dropdown-item {
-    transition: all 0.2s ease-in-out;
+    font-size: 0.88rem;
+    color: var(--text-header-main);
+    border-radius: 0 !important;
+    border-left: 2px solid transparent;
+    transition: all 0.15s ease;
 }
 
 .dropdown-menu .dropdown-item:hover {
-    background-color: #f1f5f9 !important;
-    transform: translateX(3px);
+    background-color: rgba(144, 124, 106, 0.08) !important;
+    color: #1a202c !important;
+    border-left-color: var(--color-accent-main);
+    transform: none !important; /* Desactiva el desplazamiento brusco */
 }
 
 .dropdown-menu .dropdown-item.text-danger:hover {
-    background-color: #fef2f2 !important;
+    background-color: #fff5f5 !important;
+    color: #e53e3e !important;
+    border-left-color: #e53e3e;
+}
+
+/* Iconos dentro del menú desplegable */
+.dropdown-menu .dropdown-item i {
+    color: var(--color-accent-main);
+}
+
+.dropdown-menu .dropdown-item.text-danger i {
+    color: #e53e3e;
 }
 
 /* Color personalizado para el icono del perfil alineado al sistema */
 .text-primary-system {
-    color: var(--color-primary-dark, #0e2f44) !important;
+    color: var(--color-accent-main) !important;
 }
 
 /* ==========================================================================
-   TOPBAR RESPONSIVO (topbar.css)
+   TOPBAR RESPONSIVO
    ========================================================================== */
 
 @media (max-width: 991.98px) {
     .header {
-        width: 100% !important; /* Ocupa todo el ancho en móviles */
+        width: 100% !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 999 !important; /* Por debajo de la sidebar (1005) y overlay (1000) */
-    }
-
-    .header-decorations {
-        /* En móviles quitamos 'fixed' para evitar parpadeos al hacer scroll */
-        background-attachment: scroll !important; 
+        z-index: 999 !important;
     }
 }

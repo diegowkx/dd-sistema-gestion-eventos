@@ -1,12 +1,13 @@
 /* ==========================================================================
-   ESTRUCTURA Y DISEÑO FOOTER - INMOBILIARIA (footer.css)
+   ESTRUCTURA Y DISEÑO FOOTER - INMOBILIARIA EJECUTIVO (footer.css)
    ========================================================================== */
 
 :root {
-    --footer-height: 57px;
-    --footer-bg-start: #0e2f44; /* var(--color-primary-dark) */
-    --footer-bg-end: #1a4d6e;   /* var(--color-primary-main) */
-    --footer-border-color: rgba(226, 212, 195, 0.25); /* Tono arena muy suave */
+    --footer-height: 52px;
+    --footer-bg-main: #907C6A;
+    --footer-bg-sidebar-piece: #7d6a59; /* Un tono ligeramente más oscuro para la pieza */
+    --footer-border-color: #82705f;
+    --footer-text-color: #f7f5f2;
 }
 
 .footer {
@@ -19,8 +20,10 @@
     z-index: 1050;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, var(--footer-bg-start) 0%, var(--footer-bg-end) 100%) !important;
-    box-shadow: 0 -4px 15px rgba(14, 47, 68, 0.08);
+    background: var(--footer-bg-main) !important;
+    box-shadow: none !important;
+    border-top: 1px solid var(--footer-border-color);
+    border-radius: 0 !important;
 }
 
 /* Pieza de extensión visual del Sidebar */
@@ -30,37 +33,22 @@
     left: 0;
     width: var(--sidebar-width);
     height: 100%;
-    background: linear-gradient(135deg, var(--footer-bg-start) 0%, var(--footer-bg-end) 100%) !important;
+    background: var(--footer-bg-sidebar-piece) !important;
     overflow: hidden;
     z-index: 2;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.25s ease-in-out;
     border-right: 1px solid var(--footer-border-color);
     display: flex;
     align-items: center;
-    padding-left: 1.2rem;
+    padding-left: 1.5rem;
+    border-radius: 0 !important;
 }
 
-/* Patrón de líneas diagonales espaciadas y visibles sobre fondo oscuro */
-.footer-sidebar-piece::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: repeating-linear-gradient(
-        -45deg,
-        rgba(255, 255, 255, 0.06),
-        rgba(255, 255, 255, 0.06) 2px,
-        transparent 2px,
-        transparent 35px
-    );
-
-    /* Ancla las líneas al sistema global de coordenadas */
-    background-attachment: fixed;
-
-    pointer-events: none;
-    z-index: 1;
+/* Limpieza de tramas o líneas decorativas */
+.footer-sidebar-piece::before,
+.footer-sidebar-piece::after {
+    display: none !important;
+    content: none !important;
 }
 
 .footer .container-fluid {
@@ -68,42 +56,44 @@
     padding-left: calc(var(--sidebar-width) + 1.5rem) !important;
     padding-right: 2rem !important;
     z-index: 3;
-    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: padding-left 0.25s ease-in-out;
 }
 
 .footer .text-white-80 {
-    color: rgba(255, 255, 255, 0.82) !important;
+    color: var(--footer-text-color) !important;
+    font-size: 0.82rem;
     font-weight: 400;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.3px;
 }
 
 .footer strong {
     font-weight: 600;
+    color: #ffffff;
 }
 
-/* Indicador de estado del sistema dentro de la pieza del sidebar */
+/* Indicador de estado sobrio y recto */
 .footer-sidebar-brand {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     z-index: 3;
     position: relative;
-    opacity: 0.9;
 }
 
 .footer-sidebar-brand .status-dot {
-    width: 7px;
-    height: 7px;
-    background-color: #d1e8e2; /* Verde/agua suave del login */
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(209, 232, 226, 0.8);
+    width: 6px;
+    height: 6px;
+    background-color: #cfa68a; 
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 .footer-sidebar-brand .system-status-text {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.72rem;
+    color: #ffffff;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     white-space: nowrap;
 }
 
@@ -113,6 +103,8 @@
 
 body.sidebar-collapsed .footer-sidebar-piece {
     width: var(--sidebar-collapsed-width) !important;
+    padding-left: 0;
+    justify-content: center;
 }
 
 body.sidebar-collapsed .footer-sidebar-brand .system-status-text {
@@ -124,36 +116,26 @@ body.sidebar-collapsed .footer .container-fluid {
 }
 
 /* ==========================================================================
-   FOOTER RESPONSIVO MÓVIL (footer.css)
+   FOOTER RESPONSIVO MÓVIL
    ========================================================================== */
 
 @media (max-width: 991.98px) {
-    /* 1. Ajustar capas: el footer debe quedar por debajo de la sidebar y del overlay */
     .footer {
         z-index: 990 !important;
     }
 
-    /* 2. Ocultar la pieza de extensión del sidebar en móviles */
     .footer-sidebar-piece {
         display: none !important;
     }
 
-    /* 3. Quitar el espacio/padding reservado para la sidebar */
     .footer .container-fluid {
         padding-left: 1rem !important;
         padding-right: 1rem !important;
-        text-align: center; /* Centra el texto en pantallas pequeñas */
+        text-align: center;
     }
 
-    /* 4. Si tienes elementos flotantes a lados opuestos, los apilamos ordenadamente */
     .footer .container-fluid .row,
     .footer .container-fluid .d-flex {
         justify-content: center !important;
-        font-size: 0.8rem;
-    }
-
-    /* 5. Evitamos la propiedad fixed en la textura para optimizar rendimiento móvil */
-    .footer-sidebar-piece::before {
-        background-attachment: scroll !important;
     }
 }
