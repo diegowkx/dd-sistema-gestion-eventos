@@ -1,12 +1,8 @@
 <div class="deznav font-primary-family">
     <div class="nav-header">
         <a href="?c=dashboard" class="brand-logo text-decoration-none">
-            <img src="<?php echo BASE_URL; ?>/assets/images/logo-word.png" 
-                alt="<?php echo APP_NAME; ?>" 
-                class="sidebar-logo">
-            <img src="<?php echo BASE_URL; ?>/assets/images/logo-image.png" 
-                alt="<?php echo APP_NAME; ?>" 
-                class="sidebar-logo-icon">
+            <img src="<?php echo BASE_URL; ?>/assets/images/logo-word.png" alt="<?php echo APP_NAME; ?>" class="sidebar-logo">
+            <img src="<?php echo BASE_URL; ?>/assets/images/logo-image.png" alt="<?php echo APP_NAME; ?>" class="sidebar-logo-icon">
         </a>
     </div>
 

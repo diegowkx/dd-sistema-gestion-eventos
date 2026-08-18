@@ -150,7 +150,7 @@ $(document).ready(function () {
             
             Swal.fire({
                 title: 'Generando Previsualización',
-                text: 'Procesando el PDF con Dompdf...',
+                text: 'Procesando el PDF...',
                 allowOutsideClick: false,
                 didOpen: () => Swal.showLoading()
             });
