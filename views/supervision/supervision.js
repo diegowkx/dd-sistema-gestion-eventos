@@ -62,9 +62,10 @@ $(document).ready(function () {
             }, 
             {
                 data: null,
-                render: function (row) {
-                    const tema = row.tema || '—';
-                    const ubi = row.direccion || '—';
+                render: function (data, type, row) {
+                    const rowData = row || data || {};
+                    const tema = rowData.tema || '—';
+                    const ubi = rowData.direccion || '—';
                     return `
                         <span class="d-block fw-semibold text-dark">${escapeHtml(tema)}</span>
                         <span class="text-muted extra-small">${escapeHtml(ubi)}</span>
@@ -102,23 +103,24 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 className: 'text-center',
-                render: function (row) {
+                render: function (data, type, row) {
+                    const rowData = row || data || {};
                     if (filtroActual === 'ELIMINADOS') {
                         return `
                             <button type="button"
                                     class="btn btn-sm btn-danger btn-eliminar-definitivo rounded-2 px-3 fw-semibold"
-                                    data-id="${row.id}"
-                                    data-titulo="${escapeAttribute(row.titulo || '')}">
+                                    data-id="${rowData.id}"
+                                    data-titulo="${escapeAttribute(rowData.titulo || '')}">
                                 <i class="fas fa-trash-alt fs-8 me-1"></i>Eliminar definitivo
                             </button>
                         `;
                     }
 
-                    const puedeAccionar = row.publicacion === 'PENDIENTE' || row.publicacion === 'RECHAZADO';
+                    const puedeAccionar = rowData.publicacion === 'PENDIENTE' || rowData.publicacion === 'RECHAZADO';
                     return `
                         <button type="button"
                                 class="btn btn-sm ${puedeAccionar ? 'btn-luxury-primary' : 'btn-outline-secondary'} btn-revisar-evento rounded-2 px-3 fw-semibold"
-                                data-id="${row.id}">
+                                data-id="${rowData.id}">
                             <i class="fas ${puedeAccionar ? 'fa-clipboard-check' : 'fa-eye'} fs-8 me-1"></i>${puedeAccionar ? 'Revisar' : 'Ver'}
                         </button>
                     `;

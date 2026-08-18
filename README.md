@@ -1,1 +1,1 @@
-Sistema de Parking de Vehiculos
+Sistema de Gestión de Eventos

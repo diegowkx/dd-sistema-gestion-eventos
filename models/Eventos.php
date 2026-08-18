@@ -12,42 +12,35 @@ class Eventos {
     }
 
     /**
-     * SELECT_BASE con Alias explícitos para mapear los campos exactos
-     * de la tabla 'eventos' hacia la interfaz JS / DataTables.
+     * SELECT_BASE con los campos exactos de la tabla 'eventos'.
      */
     private const SELECT_BASE = "
         SELECT 
-            e.id, 
-            e.titulo, 
-            e.tema, 
-            e.tema AS categoria_nombre,
-            e.descripcion, 
-            e.fecha_evento,
-            DATE_FORMAT(e.fecha_evento, '%Y-%m-%d') AS fecha,
-            TIME_FORMAT(e.fecha_evento, '%H:%i') AS hora,
-            e.direccion,
-            e.direccion AS lugar,
-            e.cupos,
-            e.cupos AS aforo,
-            e.precio, 
-            e.registro_username, 
-            e.registro_username AS organizador,
-            e.publicacion,
-            e.supervisor_username, 
-            e.observaciones, 
-            e.activo, 
-            e.created_at, 
-            e.updated_at
-        FROM eventos e
+            id, 
+            titulo, 
+            tema, 
+            descripcion, 
+            fecha_evento, 
+            direccion, 
+            cupos, 
+            precio, 
+            registro_username, 
+            publicacion, 
+            supervisor_username, 
+            observaciones, 
+            activo, 
+            created_at, 
+            updated_at
+        FROM eventos
     ";
 
     public function getAll(): array {
-        $stmt = $this->pdo->query(self::SELECT_BASE . " WHERE e.activo = 1 ORDER BY e.fecha_evento DESC");
+        $stmt = $this->pdo->query(self::SELECT_BASE . " WHERE activo = 1 ORDER BY fecha_evento DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getAllInactive(): array {
-        $stmt = $this->pdo->query(self::SELECT_BASE . " WHERE e.activo = 0 ORDER BY e.created_at DESC");
+        $stmt = $this->pdo->query(self::SELECT_BASE . " WHERE activo = 0 ORDER BY created_at DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -56,13 +49,13 @@ class Eventos {
      * por su estado de publicación (PENDIENTE / APROBADO / RECHAZADO).
      */
     public function getAllPorPublicacion(string $publicacion): array {
-        $stmt = $this->pdo->prepare(self::SELECT_BASE . " WHERE e.activo = 1 AND e.publicacion = ? ORDER BY e.updated_at DESC");
+        $stmt = $this->pdo->prepare(self::SELECT_BASE . " WHERE activo = 1 AND publicacion = ? ORDER BY updated_at DESC");
         $stmt->execute([$publicacion]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getById(int $id): array|false {
-        $stmt = $this->pdo->prepare(self::SELECT_BASE . " WHERE e.id = ?");
+        $stmt = $this->pdo->prepare(self::SELECT_BASE . " WHERE id = ?");
         $stmt->execute([$id]);
         $evento = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($evento) {

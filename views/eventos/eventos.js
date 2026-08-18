@@ -114,8 +114,9 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 className: 'text-center',
-                render: function (row) {
-                    const jsonEvento = encodeURIComponent(JSON.stringify(row));
+                render: function (data, type, row) {
+                    const rowData = row || data || {};
+                    const jsonEvento = encodeURIComponent(JSON.stringify(rowData));
 
                     const svgEditar = `
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
