@@ -85,7 +85,7 @@ function loadEventDetail(id) {
         </div>
     `;
 
-    fetch(`${BASE_URL}/?c=LandingPage&a=getDetalleAjax&id=${id}`)
+    fetch(`${BASE_URL}/?c=landing_page&a=getDetalleAjax&id=${id}`)
         .then(res => res.json())
         .then(response => {
             if (response.status === 'success') {
@@ -241,7 +241,7 @@ function enviarInscripcion(formData) {
         didOpen: () => { Swal.showLoading(); }
     });
 
-    fetch(`${BASE_URL}/?c=LandingPage&a=procesarInscripcion`, {
+    fetch(`${BASE_URL}/?c=landing_page&a=procesarInscripcion`, {
         method: 'POST',
         body: formData
     })
