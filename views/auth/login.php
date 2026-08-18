@@ -9,23 +9,17 @@
 <body class="font-primary-family login-body">
 
     <div class="login-wrapper">
-        <!-- Fondo Superior -->
-        <div class="login-top-section">
+        <!-- Columna Izquierda: Imagen Corporativa -->
+        <div class="login-left-section">
+            <div class="overlay"></div>
             <div class="brand-welcome">
                 <h1 class="text-bold"><?php echo APP_NAME; ?></h1>
-                <p>Sistema de Gestión Inmobiliaria</p>
-            </div>
-            
-            <!-- Separador SVG Ondulado -->
-            <div class="wave-separator">
-                <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-                    <path fill="#f3e9dc" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,165.3C672,160,768,192,864,202.7C960,213,1056,203,1152,181.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                </svg>
+                <p>Sistema de Gestión de Eventos</p>
             </div>
         </div>
 
-        <!-- Fondo Inferior -->
-        <div class="login-bottom-section">
+        <!-- Columna Derecha: Formulario de Acceso -->
+        <div class="login-right-section">
             <div class="login-card-box">
                 <div class="login-header text-center">
                     <a href="index.php" class="brand-logo text-bold">
@@ -72,7 +66,7 @@
             text: '<?php echo addslashes($error); ?>',
             confirmButtonColor: (typeof AppConfig !== 'undefined' && AppConfig.sweetAlertDefaults) 
                 ? AppConfig.sweetAlertDefaults.confirmButtonColor 
-                : '#d9383a',
+                : '#907C6A',
             background: '#ffffff',
             customClass: { popup: 'shadow-lg' },
             heightAuto: false

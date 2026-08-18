@@ -1,26 +1,23 @@
 /* ==========================================================================
-   SISTEMA DE DISEÑO BASE - VARIABLES GLOBALES Y DEGRADADOS
+   SISTEMA DE DISEÑO BASE - VARIABLES GLOBALES Y DEGRADADOS MARRÓN
    ========================================================================== */
 
 :root {
-    /* --- 1. Paleta de Colores Base --- */
-    --color-primary-dark: #0e2f44;
-    --color-primary-main: #1a4d6e;
-    --color-primary-gradient-end: #0e3b5a;
-    --color-primary-light: #d1e8e2;
+    /* --- 1. Paleta Sobria Marrón (#907C6A) --- */
+    --color-primary-dark: #5c4f43;
+    --color-primary-main: #907C6A;
+    --color-primary-gradient-end: #786656;
+    --color-primary-light: #f7f5f2;
 
-    /* --- 2. Parámetros de Degradados (2 colores + ángulo) --- */
+    /* --- 2. Parámetros de Degradados --- */
     --gradient-angle: 135deg;
     
-    /* Degradado del Banner Superior (Fondo) */
     --banner-gradient-start: var(--color-primary-dark);
     --banner-gradient-end: var(--color-primary-main);
     
-    /* Degradado del Botón */
     --btn-gradient-start: var(--color-primary-main);
     --btn-gradient-end: var(--color-primary-dark);
 
-    /* Degradado del Logo/Texto */
     --text-gradient-start: var(--color-primary-main);
     --text-gradient-end: var(--color-primary-gradient-end);
 
@@ -30,33 +27,33 @@
     --gradient-text: linear-gradient(var(--gradient-angle), var(--text-gradient-start) 0%, var(--text-gradient-end) 100%);
 
     /* --- 4. Fondos y Superficies --- */
-    --bg-app-body: #f3e9dc;
+    --bg-app-body: #f4f3f0;
     --bg-card-surface: #ffffff;
-    --bg-input-surface: #fcf9f5;
+    --bg-input-surface: #fcfbfa;
 
     /* --- 5. Tipografía y Neutros --- */
-    --text-primary: #1a202c;
-    --text-secondary: #5a6268;
-    --text-labels: #2b3034;
-    --text-placeholder: #8c9398;
+    --text-primary: #2a2623;
+    --text-secondary: #5c554e;
+    --text-labels: #3d3732;
+    --text-placeholder: #8c827a;
     --text-inverse: #ffffff;
 
     /* --- 6. Bordes, Radios y Sombras --- */
-    --border-card: #e2d4c3;
+    --border-card: #e3ded8;
     --border-input: #dcd6cd;
     --border-radius-card: 16px;
     --border-radius-input: 8px;
     
-    --shadow-card: 0 12px 35px rgba(14, 47, 68, 0.12);
-    --shadow-button: 0 4px 12px rgba(14, 47, 68, 0.25);
-    --shadow-button-hover: 0 6px 18px rgba(14, 47, 68, 0.35);
-    --shadow-focus: 0 0 0 3px rgba(26, 77, 110, 0.15);
+    --shadow-card: 0 12px 35px rgba(92, 79, 67, 0.12);
+    --shadow-button: 0 4px 12px rgba(92, 79, 67, 0.25);
+    --shadow-button-hover: 0 6px 18px rgba(92, 79, 67, 0.35);
+    --shadow-focus: 0 0 0 3px rgba(144, 124, 106, 0.2);
 
     --font-family-base: inherit;
 }
 
 /* ==========================================================================
-   ESTILOS DEL MÓDULO LOGIN (CONSUMIENDO DEGRADADOS VARIABLE)
+   ESTILOS DEL MÓDULO LOGIN (ESTRUCTURA SPLIT DERECHA / IZQUIERDA)
    ========================================================================== */
 
 /* 1. Fondo General */
@@ -68,73 +65,63 @@
 }
 
 .login-wrapper {
-    position: relative;
+    display: flex;
     width: 100vw;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
-/* 2. Banner Superior con Gradiente */
-.login-top-section {
+/* 2. Sección Izquierda: Imagen con Overlay Marrón */
+.login-left-section {
+    flex: 1;
     position: relative;
-    height: 45vh;
-    min-height: 280px;
-    background: var(--gradient-banner); /* Consume el gradiente armado */
+    background: url('../../../images/login.png') no-repeat center center;
+    background-size: cover;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0 1rem;
-    box-sizing: border-box;
+    padding: 3rem;
+}
 
-    & .brand-welcome {
-        color: var(--text-inverse);
-        text-align: center;
-        margin-top: -30px;
-        z-index: 2;
+.login-left-section .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(92, 79, 67, 0.82) 0%, rgba(144, 124, 106, 0.7) 100%);
+    z-index: 1;
+}
 
-        & h1 {
-            font-size: 2.4rem;
-            letter-spacing: 1px;
-            margin-bottom: 0.3rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+.login-left-section .brand-welcome {
+    position: relative;
+    z-index: 2;
+    color: var(--text-inverse);
+    text-align: center;
+    max-width: 480px;
 
-        & p {
-            font-size: 1.05rem;
-            opacity: 0.88;
-            color: var(--color-primary-light);
-            margin: 0;
-        }
+    & h1 {
+        font-size: 2.8rem;
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
 
-    & .wave-separator {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        overflow: hidden;
-        line-height: 0;
-
-        & svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 90px;
-        }
+    & p {
+        font-size: 1.2rem;
+        opacity: 0.95;
+        color: var(--color-primary-light);
+        margin: 0;
     }
 }
 
-/* 3. Parte Inferior */
-.login-bottom-section {
+/* 3. Sección Derecha: Contenedor del Formulario */
+.login-right-section {
     flex: 1;
-    background-color: var(--bg-app-body) !important;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding: 0 1.5rem 2.5rem;
-    z-index: 3;
+    background-color: var(--bg-app-body);
+    padding: 2rem;
 }
 
 /* 4. Tarjeta del Formulario */
@@ -142,23 +129,21 @@
 
     & .login-card-box {
         width: 100%;
-        max-width: 410px;
+        max-width: 420px;
         background: var(--bg-card-surface);
-        padding: 2.2rem 2.5rem;
+        padding: 2.5rem 2.5rem;
         border-radius: var(--border-radius-card);
         box-shadow: var(--shadow-card);
-        margin-top: -90px;
         border: 1px solid var(--border-card);
 
         & .login-header {
             text-align: center;
-            margin-bottom: 1.8rem;
+            margin-bottom: 2rem;
 
-            /* Logo con Texto en Gradiente */
             & .brand-logo {
-                font-size: 1.8rem;
+                font-size: 2rem;
                 color: var(--color-primary-main) !important;
-                background: var(--gradient-text); /* Consume el gradiente armado */
+                background: var(--gradient-text);
                 background-clip: text;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
@@ -170,6 +155,7 @@
             & .login-title {
                 font-size: 1.15rem;
                 color: var(--text-secondary);
+                margin: 0;
             }
         }
 
@@ -239,12 +225,11 @@
                 }
             }
 
-            /* Botón con Gradiente */
             & .btn-custom-submit {
                 font-family: var(--font-family-base) !important;
                 width: 100%;
                 padding: 0.85rem !important;
-                background: var(--gradient-button) !important; /* Consume el gradiente armado */
+                background: var(--gradient-button) !important;
                 color: var(--text-inverse) !important;
                 border: none !important;
                 border-radius: var(--border-radius-input) !important;
@@ -277,19 +262,18 @@ input.custom-input::placeholder {
     color: var(--text-placeholder) !important;
 }
 
-/* Responsividad */
-@media (max-width: 576px) {
-    .login-top-section {
-        height: 35vh;
-        min-height: 220px;
-
-        & .brand-welcome h1 { font-size: 1.8rem; }
-        & .brand-welcome p { font-size: 0.95rem; }
-        & .wave-separator svg { height: 50px; }
+/* Responsividad para móviles y tablets */
+@media (max-width: 991px) {
+    .login-wrapper {
+        flex-direction: column;
     }
 
-    .login-card-box {
-        margin-top: -60px !important;
-        padding: 1.8rem 1.5rem !important;
+    .login-left-section {
+        display: none; /* Se oculta la imagen lateral en pantallas pequeñas */
+    }
+
+    .login-right-section {
+        min-height: 100vh;
+        padding: 1.5rem;
     }
 }
