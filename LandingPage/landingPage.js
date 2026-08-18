@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     initCarousel();
     initHashRouter();
-    initFormParticipanteGlobal();
     window.addEventListener('hashchange', initHashRouter);
 });
 
@@ -31,65 +30,6 @@ function initHashRouter() {
         document.getElementById('view-detalle').style.display = 'block';
         loadEventDetail(id);
     }
-}
-
-function initFormParticipanteGlobal() {
-    const form = document.getElementById('formParticipanteGlobal');
-    if (!form) return;
-
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-
-        fetch(`${BASE_URL}/?c=LandingPage&a=registrarParticipante`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire('¡Registrado!', data.message, 'success').then(() => {
-                    location.reload();
-                });
-            } else {
-                Swal.fire('Atención', data.message, 'warning');
-            }
-        })
-        .catch(() => Swal.fire('Error', 'Surgió un error al procesar el registro.', 'error'));
-    });
-}
-
-function handleCredentialResponse(response) {
-    const formData = new FormData();
-    formData.append('credential', response.credential);
-
-    fetch(`${BASE_URL}/?c=LandingPage&a=loginGoogle`, {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(res => {
-        if (res.status === 'success') {
-            if (res.registrado) {
-                Swal.fire('¡Bienvenido!', res.message, 'success').then(() => location.reload());
-            } else {
-                // Pre-completar formulario para requerir DNI obligatoriamente
-                document.getElementById('part_correo').value = res.data.correo || '';
-                document.getElementById('part_nombres').value = res.data.nombres || '';
-                document.getElementById('part_apellidos').value = res.data.apellidos || '';
-                document.getElementById('part_google_id').value = res.data.google_id || '';
-
-                Swal.fire('Por favor ingresa tu Documento de Identidad', 'Para completar tu registro requerimos tu DNI/CE.', 'info');
-            }
-        } else {
-            Swal.fire('Error', res.message, 'error');
-        }
-    });
-}
-
-function cerrarSesionLanding() {
-    fetch(`${BASE_URL}/?c=LandingPage&a=logoutLanding`)
-        .then(() => location.reload());
 }
 
 function loadEventDetail(id) {
@@ -130,14 +70,6 @@ function loadEventDetail(id) {
 function renderEventDetailUI(evento) {
     const container = document.getElementById('detalleContent');
 
-    const doc   = (typeof USER_DATA !== 'undefined' && USER_DATA) ? (USER_DATA.documento_id || '') : '';
-    const nom   = (typeof USER_DATA !== 'undefined' && USER_DATA) ? (USER_DATA.nombres || '') : '';
-    const ape   = (typeof USER_DATA !== 'undefined' && USER_DATA) ? (USER_DATA.apellidos || '') : '';
-    const email = (typeof USER_DATA !== 'undefined' && USER_DATA) ? (USER_DATA.correo || '') : '';
-    const tel   = (typeof USER_DATA !== 'undefined' && USER_DATA) ? (USER_DATA.telefono || '') : '';
-
-    const precioNum = parseFloat(evento.precio);
-    const esDePago = precioNum > 0;
     const estaBloqueado = evento.es_pasado || evento.cupos_disponibles <= 0;
 
     let mensajeEstado = '';
@@ -154,7 +86,7 @@ function renderEventDetailUI(evento) {
         
         <div class="event-card" style="max-width: 850px; margin: 0 auto; height: auto;">
             <div class="event-card-img" style="height: 300px;">
-                <img src="${evento.imagen ? evento.imagen : 'assets/img/default-event.jpg'}" alt="${evento.titulo}">
+                <img src="${evento.imagen ? evento.imagen : `${BASE_URL}/assets/images/logo-image.png`}" alt="${evento.titulo}">
                 <span class="event-badge">${evento.tema}</span>
             </div>
             <div class="event-card-body" style="padding: 2rem;">
@@ -180,40 +112,36 @@ function renderEventDetailUI(evento) {
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Documento de Identidad (*)</label>
-                                <input type="text" class="form-control" name="documento_id" value="${doc}" required>
+                                <input type="text" class="form-control" name="documento_id" maxlength="15" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Correo Electrónico (*)</label>
-                                <input type="email" class="form-control" name="correo" value="${email}" required>
+                                <input type="email" class="form-control" name="correo" required>
                             </div>
                         </div>
 
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nombres (*)</label>
-                                <input type="text" class="form-control" name="nombres" value="${nom}" required>
+                                <input type="text" class="form-control" name="nombres" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Apellidos (*)</label>
-                                <input type="text" class="form-control" name="apellidos" value="${ape}" required>
+                                <input type="text" class="form-control" name="apellidos" required>
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" name="telefono" value="${tel}">
+                                <input type="text" class="form-control" name="telefono" maxlength="15">
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                             <span class="event-price" style="font-size: 1.6rem; font-weight: bold;">
-                                ${esDePago ? 'S/ ' + precioNum.toFixed(2) : 'Gratis'}
+                                ${Number(evento.precio) > 0 ? 'S/ ' + Number(evento.precio).toFixed(2) : 'Gratis'}
                             </span>
                             
-                            ${!esDePago ? `
-                                <button type="submit" class="landing-btn landing-btn-primary">Confirmar Inscripción Gratuita</button>
-                            ` : `
-                                <div id="paypal-button-container" style="width: 250px;"></div>
-                            `}
+                            <button type="submit" class="landing-btn landing-btn-primary">Confirmar Inscripción</button>
                         </div>
                     </form>
                 ` : ''}
@@ -223,39 +151,13 @@ function renderEventDetailUI(evento) {
 
     const form = document.getElementById('registrationForm');
 
-    if (form && !esDePago) {
+    if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             enviarInscripcion(new FormData(form));
         });
     }
 
-    if (form && esDePago && window.paypal) {
-        paypal.Buttons({
-            createOrder: (data, actions) => {
-                if (!form.checkValidity()) {
-                    form.reportValidity();
-                    return actions.reject();
-                }
-
-                const montoUSD = (precioNum / 3.70).toFixed(2);
-
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: { value: montoUSD }
-                    }]
-                });
-            },
-            onApprove: (data, actions) => {
-                return actions.order.capture().then(() => {
-                    enviarInscripcion(new FormData(form));
-                });
-            },
-            onError: () => {
-                Swal.fire('Error', 'No se pudo completar el pago con PayPal.', 'error');
-            }
-        }).render('#paypal-button-container');
-    }
 }
 
 function enviarInscripcion(formData) {

@@ -1,7 +1,6 @@
 {
     "require": {
         "dompdf/dompdf": "^3.1",
-        "phpmailer/phpmailer": "^7.1",
-        "google/apiclient": "^2.15.0"
+        "phpmailer/phpmailer": "^7.1"
     }
 }

@@ -48,36 +48,6 @@ class LandingPage {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerParticipantePorCorreoOGoogleId(string $correo, string $googleId): array|false {
-        $stmt = $this->pdo->prepare("
-            SELECT * FROM participantes 
-            WHERE correo = ? OR (google_id IS NOT NULL AND google_id = ?)
-            LIMIT 1
-        ");
-        $stmt->execute([strtolower(trim($correo)), $googleId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function guardarOActualizarParticipanteGlobal(array $data): void {
-        $sql = "INSERT INTO participantes (documento_id, nombres, apellidos, correo, telefono, google_id)
-                VALUES (:documento_id, :nombres, :apellidos, :correo, :telefono, :google_id)
-                ON DUPLICATE KEY UPDATE
-                    nombres = VALUES(nombres),
-                    apellidos = VALUES(apellidos),
-                    telefono = COALESCE(VALUES(telefono), telefono),
-                    google_id = COALESCE(VALUES(google_id), google_id)";
-
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            ':documento_id' => trim((string)$data['documento_id']),
-            ':nombres'      => trim((string)$data['nombres']),
-            ':apellidos'    => trim((string)$data['apellidos']),
-            ':correo'       => strtolower(trim((string)$data['correo'])),
-            ':telefono'     => !empty($data['telefono']) ? trim((string)$data['telefono']) : null,
-            ':google_id'    => $data['google_id'] ?? null
-        ]);
-    }
-
     public function estaInscrito(int $eventoId, string $documentoId): bool {
         $stmt = $this->pdo->prepare("
             SELECT COUNT(*) FROM entradas_participantes 
@@ -94,7 +64,7 @@ class LandingPage {
         return max(0, $cuposTotales - $inscritos);
     }
 
-    public function registrarEntradaInamovible(array $data): bool {
+    public function registrarInscripcion(array $data): bool {
         $stmt = $this->pdo->prepare("
             INSERT INTO entradas_participantes (evento_id, documento_id, nombres, apellidos, correo, telefono)
             VALUES (:evento_id, :documento_id, :nombres, :apellidos, :correo, :telefono)
