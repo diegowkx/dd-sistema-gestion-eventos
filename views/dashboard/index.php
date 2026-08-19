@@ -4,6 +4,7 @@
     <?php include __DIR__ . '/../layouts/head.php'; ?>
 </head>
 <body class="font-primary-family">
+    <?php $esAdministrador = $esAdministrador ?? strtoupper((string)($_SESSION['user_rol'] ?? '')) === 'ADMINISTRADOR'; ?>
 
     <div id="main-wrapper">
         <?php include __DIR__ . '/../layouts/sidebar.php'; ?>
@@ -21,41 +22,56 @@
                         </p>
                     </div>
                     <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                        <span class="fs-5 text-bold text-accent">Sistema Inmobiliario</span>
+                        <span class="fs-5 text-bold text-accent">Sistema de Eventos</span>
                     </div>
                 </div>
+
+                <form id="filtro-dashboard" class="row g-2 align-items-end w-100 mb-4">
+                    <div class="col-12 col-md-5">
+                        <label for="fecha_desde" class="form-label extra-small text-muted text-uppercase fw-bold">Desde</label>
+                        <input type="date" class="form-control form-control-luxury rounded-2 border" id="fecha_desde" name="fecha_desde">
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <label for="fecha_hasta" class="form-label extra-small text-muted text-uppercase fw-bold">Hasta</label>
+                        <input type="date" class="form-control form-control-luxury rounded-2 border" id="fecha_hasta" name="fecha_hasta">
+                    </div>
+                    <div class="col-12 col-md-2 d-flex gap-2 align-items-end">
+                        <button type="submit" class="btn btn-primary-custom flex-fill" style="height: 44px;"><i class="fas fa-filter me-1"></i>Filtrar</button>
+                        <button type="button" id="limpiar-filtro-dashboard" class="btn btn-light-creative flex-fill" style="height: 44px; background-color: #ffffff;">Limpiar</button>
+                    </div>
+                </form>
 
                 <!-- KPIs -->
                 <div class="row g-3 mb-4">
                     <div class="col-6 col-lg-3">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-3 p-md-4">
-                                <span class="extra-small text-muted text-uppercase fw-bold">Inmuebles activos</span>
-                                <h2 class="fw-bold mb-0 mt-1" id="kpi_total_inmuebles">—</h2>
+                                <span class="extra-small text-muted text-uppercase fw-bold">Eventos totales</span>
+                                    <h2 class="fw-bold mb-0 mt-1" id="kpi_eventos_totales">—</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-3 p-md-4">
-                                <span class="extra-small text-muted text-uppercase fw-bold">Pendientes de revisión</span>
-                                <h2 class="fw-bold mb-0 mt-1 text-warning" id="kpi_pendientes_revision">—</h2>
+                                <span class="extra-small text-muted text-uppercase fw-bold">Eventos pendientes</span>
+                                    <h2 class="fw-bold mb-0 mt-1 text-warning" id="kpi_eventos_pendientes">—</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-3 p-md-4">
-                                <span class="extra-small text-muted text-uppercase fw-bold">Usuarios activos</span>
-                                <h2 class="fw-bold mb-0 mt-1" id="kpi_usuarios_activos">—</h2>
+                                <span class="extra-small text-muted text-uppercase fw-bold">Ventas realizadas</span>
+                                <h2 class="fw-bold mb-0 mt-1" id="kpi_ventas_realizadas">—</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-3 p-md-4">
-                                <span class="extra-small text-muted text-uppercase fw-bold">Interesados este mes</span>
-                                <h2 class="fw-bold mb-0 mt-1 text-success" id="kpi_interesados_mes">—</h2>
+                                <span class="extra-small text-muted text-uppercase fw-bold">Ingresos estimados</span>
+                                <h2 class="fw-bold mb-0 mt-1 text-success" id="kpi_ingresos_estimados">—</h2>
                             </div>
                         </div>
                     </div>
@@ -67,8 +83,8 @@
                     <div class="col-12 col-lg-4 mb-4">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-4">
-                                <h5 class="fw-bold mb-1">Estado de Publicación</h5>
-                                <p class="extra-small text-muted mb-4">Inmuebles activos según su revisión.</p>
+                                <h5 class="fw-bold mb-1">Estado de publicación</h5>
+                                <p class="extra-small text-muted mb-4">Eventos activos según su revisión.</p>
                                 <div id="lista-publicacion">
                                     <p class="text-muted extra-small mb-0">Cargando...</p>
                                 </div>
@@ -76,45 +92,43 @@
                         </div>
                     </div>
 
-                    <!-- REPORTE: VENDIDAS / ALQUILADAS (requerimiento 4) -->
                     <div class="col-12 col-lg-4 mb-4">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-4">
-                                <h5 class="fw-bold mb-1">Situación Comercial</h5>
-                                <p class="extra-small text-muted mb-4">Disponibles, reservadas, alquiladas y vendidas.</p>
-                                <div id="lista-estado-comercial">
+                                <h5 class="fw-bold mb-1">Asistencia</h5>
+                                <p class="extra-small text-muted mb-4">Participantes registrados y asistentes.</p>
+                                <div id="lista-asistencia">
                                     <p class="text-muted extra-small mb-0">Cargando...</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ÚLTIMOS INTERESADOS -->
                     <div class="col-12 col-lg-4 mb-4">
                         <div class="card card-custom border-0 shadow-sm rounded-4 h-100">
                             <div class="card-body p-4">
-                                <h5 class="fw-bold mb-1">Últimos Interesados</h5>
-                                <p class="extra-small text-muted mb-4">Contactos más recientes.</p>
-                                <div id="lista-interesados">
+                                <h5 class="fw-bold mb-1">Certificaciones</h5>
+                                <p class="extra-small text-muted mb-4">Estado de emisión por participante.</p>
+                                <div id="lista-certificaciones">
                                     <p class="text-muted extra-small mb-0">Cargando...</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- VENTAS/ALQUILERES ÚLTIMOS 6 MESES -->
                     <div class="col-12 mb-4">
                         <div class="card card-custom border-0 shadow-sm rounded-4">
                             <div class="card-body p-4">
-                                <h5 class="fw-bold mb-1">Ventas y Alquileres — Últimos 6 Meses</h5>
-                                <p class="extra-small text-muted mb-4">Basado en el último cambio de estado del inmueble.</p>
-                                <canvas id="chart_ventas_alquileres" height="90"></canvas>
+                                <h5 class="fw-bold mb-1">Ingresos y ventas por fecha</h5>
+                                <p class="extra-small text-muted mb-4">Ingresos estimados según la fecha del evento.</p>
+                                <canvas id="chart_ingresos" height="90"></canvas>
+                                <p id="mensaje-chart-ingresos" class="text-muted extra-small mb-0 d-none">No hay ingresos para el rango seleccionado.</p>
                             </div>
                         </div>
                     </div>
 
                     <?php if ($esAdministrador): ?>
-                    <!-- HISTORIAL DE IPS (solo APROBAR_INMUEBLES) -->
+                    <!-- HISTORIAL DE IPS (solo administradores) -->
                     <div class="col-12">
                         <div class="card card-custom border-0 shadow-sm rounded-4">
                             <div class="card-body p-4">
@@ -177,6 +191,6 @@
 
     <?php include __DIR__ . '/../layouts/scripts.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-    <script src="<?php echo BASE_URL; ?>/views/dashboard/dashboard.js"></script>
+    <script src="<?php echo BASE_URL; ?>/views/dashboard/dashboard.js?v=<?php echo filemtime(__DIR__ . '/dashboard.js'); ?>"></script>
 </body>
 </html>

@@ -18,9 +18,15 @@ class DashboardController {
             exit;
         }
 
+        if (!$this->tienePermiso('DASHBOARD')) {
+            header('Location: ' . BASE_URL . '?c=dashboard_default');
+            exit;
+        }
+
         $this->requierePermiso('DASHBOARD');
 
         $title = "Panel Principal";
+        $esAdministrador = strtoupper((string)($_SESSION['user_rol'] ?? '')) === 'ADMINISTRADOR';
         require_once __DIR__ . '/../views/dashboard/index.php';
     }
 
@@ -35,31 +41,31 @@ class DashboardController {
         require_once __DIR__ . '/../models/Dashboard.php';
         $dashboardModel = new Dashboard($pdo);
 
-        $ingresosPorFecha = $dashboardModel->getIngresosUltimos7Dias();
-
-        // Completa los días sin cobros con 0, para que el gráfico siempre muestre 7 días
-        $indexado = [];
-        foreach ($ingresosPorFecha as $fila) {
-            $indexado[$fila['fecha']] = (float)$fila['total'];
-        }
-        $ultimos7Dias = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $fecha = date('Y-m-d', strtotime("-{$i} day"));
-            $ultimos7Dias[] = [
-                'fecha' => $fecha,
-                'total' => round($indexado[$fecha] ?? 0.0, 2),
-            ];
+        $fechaDesde = $this->obtenerFechaFiltro($_GET['fecha_desde'] ?? null) ?? date('Y-m-01');
+        $fechaHasta = $this->obtenerFechaFiltro($_GET['fecha_hasta'] ?? null) ?? date('Y-m-t');
+        if ($fechaDesde !== null && $fechaHasta !== null && $fechaDesde > $fechaHasta) {
+            echo json_encode(['success' => false, 'message' => 'El rango de fechas no es válido.']);
+            exit;
         }
 
         echo json_encode([
             'success' => true,
             'data' => [
-                'resumen'   => $dashboardModel->getResumenGeneral(),
-                'ocupacion' => $dashboardModel->getOcupacionPorTipo(),
-                'ingresos_7_dias' => $ultimos7Dias,
+                'resumen' => $dashboardModel->getResumenGeneral($fechaDesde, $fechaHasta),
+                'publicacion' => $dashboardModel->getOcupacionPorTipo($fechaDesde, $fechaHasta),
+                'ingresos_por_fecha' => $dashboardModel->getIngresosUltimos7Dias($fechaDesde, $fechaHasta),
             ]
         ]);
         exit;
+    }
+
+    private function obtenerFechaFiltro(mixed $valor): ?string {
+        $fecha = is_string($valor) ? trim($valor) : '';
+        if ($fecha === '') {
+            return null;
+        }
+        $date = DateTimeImmutable::createFromFormat('!Y-m-d', $fecha);
+        return $date !== false && $date->format('Y-m-d') === $fecha ? $fecha : null;
     }
 
     /**

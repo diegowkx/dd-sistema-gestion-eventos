@@ -79,17 +79,14 @@ $(document).ready(function() {
     // ==========================================
     // KPIs + PANELES + GRÁFICO
     // ==========================================
-    const ETIQUETAS_PUBLICACION = { PENDIENTE: 'Pendiente', APROBADO: 'Aprobado', RECHAZADO: 'Rechazado' };
+    const ETIQUETAS_PUBLICACION = { PENDIENTE: 'Pendientes', APROBADO: 'Publicados', RECHAZADO: 'Rechazados' };
     const COLOR_PUBLICACION = { PENDIENTE: 'bg-warning', APROBADO: 'bg-success', RECHAZADO: 'bg-danger' };
 
-    const ETIQUETAS_ESTADO = { DISPONIBLE: 'Disponible', RESERVADA: 'Reservada', ALQUILADA: 'Alquilada', VENDIDA: 'Vendida' };
-    const COLOR_ESTADO = { DISPONIBLE: 'bg-success', RESERVADA: 'bg-warning', ALQUILADA: 'bg-info', VENDIDA: 'bg-secondary' };
-
     function pintarKpis(resumen) {
-        document.getElementById('kpi_total_inmuebles').innerText = resumen.total_inmuebles;
-        document.getElementById('kpi_pendientes_revision').innerText = resumen.pendientes_revision;
-        document.getElementById('kpi_usuarios_activos').innerText = resumen.usuarios_activos;
-        document.getElementById('kpi_interesados_mes').innerText = resumen.interesados_este_mes;
+        document.getElementById('kpi_eventos_totales').innerText = resumen.eventos_totales;
+        document.getElementById('kpi_eventos_pendientes').innerText = resumen.eventos_pendientes;
+        document.getElementById('kpi_ventas_realizadas').innerText = resumen.ventas_realizadas;
+        document.getElementById('kpi_ingresos_estimados').innerText = Number(resumen.ingresos_estimados).toLocaleString('es-PE', { style: 'currency', currency: 'PEN' });
     }
 
     function pintarListaConteo(contenedorId, datos, etiquetas, colores) {
@@ -115,43 +112,48 @@ $(document).ready(function() {
         }).join('');
     }
 
-    function pintarInteresados(lista) {
-        const contenedor = document.getElementById('lista-interesados');
+    function pintarAsistencia(resumen) {
+        const contenedor = document.getElementById('lista-asistencia');
         if (!contenedor) return;
+        const asistentes = Number(resumen.asistentes) || 0;
+        const ventas = Number(resumen.ventas_realizadas) || 0;
+        const porcentaje = Number(resumen.porcentaje_asistencia) || 0;
+        contenedor.innerHTML = `
+            <div class="mb-3"><div class="d-flex justify-content-between extra-small mb-1"><span class="fw-semibold">Asistentes</span><span>${asistentes}</span></div><div class="progress" style="height: 10px"><div class="progress-bar bg-success" style="width: ${porcentaje}%"></div></div></div>
+            <div class="d-flex justify-content-between extra-small"><span class="fw-semibold">Inscritos</span><span>${ventas}</span></div>
+            <div class="d-flex justify-content-between extra-small"><span class="fw-semibold">Porcentaje de asistencia</span><span>${porcentaje}%</span></div>`;
+    }
 
-        if (!Array.isArray(lista) || lista.length === 0) {
-            contenedor.innerHTML = '<p class="text-muted extra-small mb-0">Sin registros recientes.</p>';
-            return;
-        }
-
-        contenedor.innerHTML = lista.map(item => `
-            <div class="d-flex justify-content-between align-items-start mb-3 pb-2 border-bottom border-light">
-                <div>
-                    <span class="fw-semibold d-block">${escapeHtml(item.nombres)} ${escapeHtml(item.apellidos)}</span>
-                    <span class="extra-small text-muted">${escapeHtml(item.inmueble_titulo || '')}</span>
-                </div>
-                <span class="extra-small text-muted text-end">${item.fecha_contacto}</span>
-            </div>
-        `).join('');
+    function pintarCertificaciones(resumen) {
+        const contenedor = document.getElementById('lista-certificaciones');
+        if (!contenedor) return;
+        contenedor.innerHTML = `
+            <div class="d-flex justify-content-between mb-2 extra-small"><span>Emitidos</span><strong class="text-success">${resumen.certificados_emitidos}</strong></div>
+            <div class="d-flex justify-content-between mb-2 extra-small"><span>Pendientes</span><strong class="text-warning">${resumen.certificados_pendientes}</strong></div>
+            <div class="d-flex justify-content-between extra-small"><span>Total de inscritos</span><strong>${resumen.ventas_realizadas}</strong></div>`;
     }
 
     let chartVentas = null;
-    function pintarChartVentas(datos) {
-        const canvas = document.getElementById('chart_ventas_alquileres');
+    function pintarChartIngresos(datos) {
+        const canvas = document.getElementById('chart_ingresos');
         if (!canvas || typeof Chart === 'undefined') return;
 
-        const etiquetas = datos.map(d => {
-            const [anio, mes] = d.mes.split('-');
-            const fecha = new Date(anio, mes - 1, 1);
-            return fecha.toLocaleDateString('es-PE', { month: 'short', year: '2-digit' });
-        });
-        const vendidas = datos.map(d => parseInt(d.vendidas, 10));
-        const alquiladas = datos.map(d => parseInt(d.alquiladas, 10));
+        const etiquetas = datos.map(d => d.fecha);
+        const ingresos = datos.map(d => Number(d.total));
+
+        const mensajeVacio = document.getElementById('mensaje-chart-ingresos');
+        if (datos.length === 0) {
+            canvas.style.display = 'none';
+            if (mensajeVacio) mensajeVacio.classList.remove('d-none');
+            return;
+        }
+
+        canvas.style.display = '';
+        if (mensajeVacio) mensajeVacio.classList.add('d-none');
 
         if (chartVentas) {
             chartVentas.data.labels = etiquetas;
-            chartVentas.data.datasets[0].data = vendidas;
-            chartVentas.data.datasets[1].data = alquiladas;
+            chartVentas.data.datasets[0].data = ingresos;
             chartVentas.update();
             return;
         }
@@ -161,38 +163,73 @@ $(document).ready(function() {
             data: {
                 labels: etiquetas,
                 datasets: [
-                    { label: 'Vendidas', data: vendidas, backgroundColor: '#6f42c1', borderRadius: 6, maxBarThickness: 28 },
-                    { label: 'Alquiladas', data: alquiladas, backgroundColor: '#0dcaf0', borderRadius: 6, maxBarThickness: 28 }
+                    { label: 'Ingresos estimados', data: ingresos, backgroundColor: '#d9383a', borderRadius: 6, maxBarThickness: 38 }
                 ]
             },
             options: {
                 responsive: true,
-                plugins: { legend: { position: 'bottom' } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                scales: { y: { beginAtZero: true } },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: context => ` ${Number(context.raw).toLocaleString('es-PE', { style: 'currency', currency: 'PEN' })}`
+                        }
+                    }
+                }
             }
         });
     }
 
     function cargarResumenDashboard() {
-        fetch('?c=dashboard&a=resumen')
+        const params = new URLSearchParams({ c: 'dashboard', a: 'resumen' });
+        const fechaDesde = document.getElementById('fecha_desde')?.value;
+        const fechaHasta = document.getElementById('fecha_hasta')?.value;
+        if (fechaDesde) params.set('fecha_desde', fechaDesde);
+        if (fechaHasta) params.set('fecha_hasta', fechaHasta);
+
+        fetch(`?${params.toString()}`, { cache: 'no-store' })
             .then(res => res.json())
             .then(result => {
-                if (!result.success) return;
+                if (!result.success) {
+                    mostrarErrorDashboard(result.message || 'No fue posible cargar el resumen.');
+                    return;
+                }
                 pintarKpis(result.data.resumen);
-                pintarListaConteo('lista-publicacion', result.data.inmuebles_por_publicacion, ETIQUETAS_PUBLICACION, COLOR_PUBLICACION);
-                pintarListaConteo('lista-estado-comercial', result.data.inmuebles_por_estado, ETIQUETAS_ESTADO, COLOR_ESTADO);
-                pintarInteresados(result.data.ultimos_interesados);
-                pintarChartVentas(result.data.ventas_alquileres_6m);
+                pintarListaConteo('lista-publicacion', result.data.publicacion, ETIQUETAS_PUBLICACION, COLOR_PUBLICACION);
+                pintarAsistencia(result.data.resumen);
+                pintarCertificaciones(result.data.resumen);
+                pintarChartIngresos(result.data.ingresos_por_fecha);
             })
-            .catch(() => {});
+            .catch(() => mostrarErrorDashboard('No fue posible conectar con el servidor.'));
     }
 
-    function escapeHtml(value) {
-        const div = document.createElement('div');
-        div.textContent = value || '';
-        return div.innerHTML;
+    function mostrarErrorDashboard(mensaje) {
+        ['lista-publicacion', 'lista-asistencia', 'lista-certificaciones'].forEach(id => {
+            const contenedor = document.getElementById(id);
+            if (contenedor) contenedor.innerHTML = `<p class="text-danger extra-small mb-0">${mensaje}</p>`;
+        });
     }
 
+    $('#filtro-dashboard').on('submit', function(event) {
+        event.preventDefault();
+        cargarResumenDashboard();
+    });
+
+    function establecerMesActual() {
+        const ahora = new Date();
+        const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+        const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
+        const formato = fecha => `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
+        document.getElementById('fecha_desde').value = formato(primerDia);
+        document.getElementById('fecha_hasta').value = formato(ultimoDia);
+    }
+
+    $('#limpiar-filtro-dashboard').on('click', function() {
+        establecerMesActual();
+        cargarResumenDashboard();
+    });
+
+    establecerMesActual();
     cargarResumenDashboard();
-    setInterval(cargarResumenDashboard, 60000);
 });

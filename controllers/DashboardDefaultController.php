@@ -19,7 +19,7 @@ class DashboardDefaultController {
         // Instancia del modelo base preparado con PDO
         require_once __DIR__ . '/../models/DashboardDefault.php';
         $dashboardDefaultModel = new DashboardDefault($pdo);
-
+        $datosGenerales = $dashboardDefaultModel->getDatosGeneralesDefault();
 
         require_once __DIR__ . '/../views/dashboard_default/index.php';
     }

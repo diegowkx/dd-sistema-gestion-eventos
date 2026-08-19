@@ -20,6 +20,7 @@
             }
 
             $grupoActual = null;
+            $dashboardUrl = tienePermisoSidebar('DASHBOARD') ? '?c=dashboard' : '?c=dashboard_default';
 
             if (in_array($currentController, ['roles', 'usuarios'], true)) {
                 $grupoActual = 'administracion';
@@ -32,7 +33,7 @@
 
             <!-- DASHBOARD -->
             <li class="<?= ($currentController === 'dashboard') ? 'mm-active' : '' ?>">
-                <a class="ai-icon" href="?c=dashboard">
+                <a class="ai-icon" href="<?php echo $dashboardUrl; ?>">
                     <i class="fas fa-th-large"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
